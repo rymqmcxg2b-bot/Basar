@@ -1,11 +1,12 @@
 # Hacker Librarian Web
 
-Simple Vite UI for the Hacker Librarian API.
+Static Vite UI for browser-local Hacker Librarian workflows.
 
 ```bash
 npm install
-VITE_API_BASE=https://YOUR_API_BASE_URL npm run dev
+npm run dev
 ```
 
-For public deployment, set `VITE_API_BASE` to the hosted API URL. Do not use
-`localhost` for public builds.
+The public build does not call a project backend or `localhost`. Users can enter
+their own 0G Router endpoint, model, and API key in Settings. Source data is
+stored in the user's browser storage by default.

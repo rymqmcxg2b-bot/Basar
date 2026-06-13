@@ -16,7 +16,8 @@ Data Personalism treats data as memory, context, labor, dignity, agency, and the
 - Mock AI provider that works without paid APIs.
 - OpenAI-compatible, Ollama-compatible, and 0G Compute provider scaffolds.
 - Optional 0G Storage dry-run adapter.
-- FastAPI API, CLI, and simple Vite web UI.
+- FastAPI API, CLI, and browser-local Vite web UI.
+- Public static web mode where users bring their own 0G Router credentials.
 - Export support for source and claim cards.
 
 ## Quickstart
@@ -41,16 +42,21 @@ Run the web UI:
 ```bash
 cd apps/web
 npm install
-VITE_API_BASE=https://YOUR_API_BASE_URL npm run dev
+npm run dev
 ```
 
-Or run both with Docker Compose:
+The public web build is static and does not call this developer machine or a
+shared backend. Users can enter their own 0G Router endpoint, model, and API key
+in the browser UI. Source data is stored in the user's browser storage by
+default.
+
+Run the optional local API with Docker Compose:
 
 ```bash
 docker compose up
 ```
 
-Set `VITE_API_BASE` to your deployed API endpoint when sharing this project publicly.
+Do not expose local Docker Compose services for public use.
 
 ### Publication Checklist
 
@@ -79,7 +85,7 @@ This project provides preservation, indexing, metadata, source scoring, and cita
 
 ## 0G Integration Status
 
-0G support is scaffolded only. Dry-run storage and compute adapters are implemented so local development works without credentials. Before production use, developers must verify current official 0G SDK/API details and replace TODOs safely.
+The public web UI supports user-owned 0G Router settings in the browser. The optional API includes a 0G Router provider and dry-run storage scaffolding so local development works without credentials.
 
 ## Non-Goals
 

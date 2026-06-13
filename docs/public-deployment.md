@@ -1,33 +1,35 @@
 # Public Deployment
 
-This deployment path keeps public traffic away from the developer machine.
+This deployment path keeps public traffic away from the developer machine. The
+default public build is a static browser app: no project backend, no local
+machine, and no shared server-side API key.
+
+Users bring their own 0G Router endpoint, model, and API key. Sources are stored
+in the user's browser storage unless the user exports them or configures their
+own storage.
+
 Do not expose local `localhost` services for public use.
+
+## GitHub Pages
+
+The repository includes `.github/workflows/pages.yml`. Enable Pages for the
+repository with "GitHub Actions" as the source, then push to `main` or run the
+workflow manually.
+
+The deployed site is a static Vite build from `apps/web/dist`.
 
 ## Render Blueprint
 
 1. Push this repository to GitHub.
 2. In Render, create a new Blueprint from the repository.
-3. Render creates:
-   - `hacker-librarian-api`: FastAPI service with a persistent disk mounted at `/var/data`.
-   - `hacker-librarian-web`: static Vite build.
-4. After the API service URL is assigned, set the web service environment variable:
-   - `VITE_API_BASE=https://YOUR_API_SERVICE_URL`
-5. Restrict CORS after the web URL is assigned:
-   - `CORS_ALLOW_ORIGINS=https://YOUR_WEB_SERVICE_URL`
+3. Render creates `hacker-librarian-web`, a static Vite build.
 
 ## 0G Router
 
-The default public deployment uses `AI_PROVIDER=mock` so no wallet or API key is
-required to launch. To enable 0G Router later, set these API service environment
-variables:
+The public web app does not include a shared 0G key. Each user enters their own
+Router endpoint, model, and API key in Settings. The key is used from that
+user's browser only.
 
-```bash
-AI_PROVIDER=0g
-ZEROG_DRY_RUN=false
-ZEROG_API_KEY=...
-ZEROG_COMPUTE_MODEL=...
-ZEROG_COMPUTE_ENDPOINT=https://router-api.0g.ai/v1
-```
-
-Keep all 0G keys server-side. Never put wallet secrets or API keys in the web
-frontend.
+If 0G Router blocks browser requests with CORS, users need an official browser
+SDK or their own proxy. Do not add a shared proxy with the maintainer's key
+unless you are prepared to pay for every user's inference.
