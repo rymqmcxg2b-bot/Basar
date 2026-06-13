@@ -2,11 +2,19 @@
 
 **A 0G-first, local-first, open-source research librarian for preserving sources, evaluating evidence, organizing knowledge, and querying personal or community archives with user-owned AI compute.**
 
-Hacker Librarian is for people who refuse to outsource truth to a single model, platform, institution, search engine, API gateway, or company. It preserves trails back to evidence, scores sources with explainable rubrics, and answers library questions only from retrieved local sources.
+Hacker Librarian is built for people who do not want truth, memory, or research infrastructure to depend on a single model, platform, institution, search engine, API gateway, or company.
+
+It preserves trails back to evidence, scores sources with explainable rubrics, and answers research questions only from retrieved local or user-selected sources.
+
+The project is also designed to encourage meaningful participation in the 0G ecosystem: using 0G-compatible AI inference, contributing source collections, experimenting with decentralized storage workflows, and turning real research archives into useful network activity.
 
 ## Why It Exists
 
-Data Personalism treats data as memory, context, labor, dignity, agency, and the trace of human judgment. The project is a reflective infrastructure response to centralization risk: build local-first, auditable, forkable, source-preserving research tools without making unverified political or conspiracy claims.
+Data Personalism treats data as memory, context, labor, dignity, agency, and the trace of human judgment.
+
+Hacker Librarian is a reflective infrastructure response to centralization risk. It aims to make research tools local-first, auditable, forkable, source-preserving, and community-extensible without relying on unverified political or conspiracy claims.
+
+The goal is not to replace human judgment with an oracle. The goal is to give individuals and communities better tools to preserve evidence, compare claims, inspect sources, and build their own durable knowledge archives.
 
 ## Features
 
@@ -20,6 +28,14 @@ Data Personalism treats data as memory, context, labor, dignity, agency, and the
 - Public static web mode where users bring their own 0G Router credentials.
 - 0G growth packages for user-contributed source collections.
 - Export support for source and claim cards.
+
+## 0G-First Direction
+
+Hacker Librarian treats 0G not only as an AI compute provider, but as a coordination layer for user-owned knowledge infrastructure.
+
+The project encourages users to preserve source collections, run retrieval-based research workflows, test 0G-compatible LLM inference, and contribute reusable archive packages that create practical demand for decentralized AI compute and storage.
+
+Instead of empty token consumption, Hacker Librarian focuses on meaningful usage: research, preservation, verification, education, and community memory.
 
 ## Quickstart
 
@@ -74,7 +90,7 @@ Do not expose local Docker Compose services for public use.
 4. Distinguish facts, claims, interpretations, opinions, and predictions.
 5. Store provenance, timestamps, URLs, local paths, content hashes, and quality reasons.
 6. Local-first by default.
-7. 0G integration is optional.
+7. 0G participation is user-owned: users choose their own Router, storage, and credentials.
 8. Model-provider and storage-provider agnostic.
 9. Source scoring must be explainable.
 10. AI outputs must cite retrieved sources.
@@ -85,9 +101,9 @@ Do not commit copyrighted books, paywalled articles, private documents, scraped 
 
 This project provides preservation, indexing, metadata, source scoring, and citation tools. It is not a pirate library.
 
-## 0G Integration Status
+## Current 0G Support
 
-The public web UI supports user-owned 0G Router settings in the browser. The optional API includes a 0G Router provider and dry-run storage scaffolding so local development works without credentials.
+The public web UI is 0G-first and user-owned: users configure their own 0G Router settings, package source collections for 0G-oriented storage workflows, and keep credentials in their own browser. The optional API remains available for local development and self-hosted deployments.
 
 ## Non-Goals
 
