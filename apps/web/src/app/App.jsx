@@ -10,17 +10,20 @@ import {
   Link,
   Settings,
   ShieldCheck,
+  UploadCloud,
   Trash2,
 } from "lucide-react";
 import {downloadJson} from "../lib/export";
 import {
   askWithRouter,
+  buildGrowthPackage,
   clearLibrary,
   createSource,
   extractClaims,
   loadClaims,
   loadSettings,
   loadSources,
+  publishGrowthPackage,
   saveClaims,
   saveSettings,
   saveSources,
@@ -46,7 +49,9 @@ function App() {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState(null);
   const [busy, setBusy] = useState(false);
+  const [publishing, setPublishing] = useState(false);
   const [error, setError] = useState("");
+  const [publishedRef, setPublishedRef] = useState("");
 
   useEffect(() => {
     const loadedSources = loadSources();
@@ -56,6 +61,7 @@ function App() {
 
   const storageMode = settings.apiKey && settings.model ? "0G Router ready" : "Local browser mode";
   const evidencePreview = useMemo(() => searchSources(sources, question || "evidence source", 3), [question, sources]);
+  const growthPackage = useMemo(() => buildGrowthPackage({sources, claims, settings}), [claims, settings, sources]);
 
   function persistSources(nextSources) {
     setSources(nextSources);
@@ -100,13 +106,21 @@ function App() {
   }
 
   function exportLibrary() {
-    downloadJson("hacker-librarian-browser-export.json", {
-      exported_at: new Date().toISOString(),
-      mode: "browser-byo-0g",
-      sources,
-      claims,
-      router_endpoint: settings.routerEndpoint,
-    });
+    downloadJson("hacker-librarian-0g-growth-package.json", growthPackage);
+  }
+
+  async function publishTo0g(event) {
+    event.preventDefault();
+    setPublishing(true);
+    setPublishedRef("");
+    setError("");
+    try {
+      setPublishedRef(await publishGrowthPackage({settings, payload: growthPackage}));
+    } catch (err) {
+      setError(`0G Storage publish failed: ${err.message || err}`);
+    } finally {
+      setPublishing(false);
+    }
   }
 
   function resetLibrary() {
@@ -118,7 +132,11 @@ function App() {
   return (
     <main>
       <aside>
-        <div className="brand"><BookOpen size={22}/> Hacker Librarian</div>
+        <div className="brand">
+          <img src={`${import.meta.env.BASE_URL}hacker-librarian-mark.png`} alt="Hacker Librarian mark"/>
+          <span>Hacker Librarian</span>
+        </div>
+        <div className="ogBadge"><span>0G</span> ecosystem tool</div>
         <div className="status"><ShieldCheck size={16}/>{storageMode}</div>
         {tabs.map(([id, Icon, label]) => (
           <button className={tab === id ? "active" : ""} key={id} onClick={() => setTab(id)}>
@@ -131,7 +149,7 @@ function App() {
         <header>
           <div>
             <h1>Hacker Librarian</h1>
-            <p>Source-preserving research in the user's browser, with optional user-owned 0G Router compute.</p>
+            <p>0G-first source preservation: local by default, user-owned Router compute, and portable growth packages for 0G storage.</p>
           </div>
           <button className="iconButton" onClick={exportLibrary} title="Export library">
             <Download size={18}/>
@@ -142,6 +160,13 @@ function App() {
 
         {tab === "sources" && (
           <section>
+            <div className="onboarding">
+              <img src={`${import.meta.env.BASE_URL}hacker-librarian-mark.png`} alt="Hacker Librarian"/>
+              <div>
+                <h2>Grow the 0G knowledge layer</h2>
+                <p>Add lawful source text, ask with your own 0G Router key, then publish a growth package to your own 0G Storage endpoint so this library can move beyond one browser.</p>
+              </div>
+            </div>
             <form className="sourceForm" onSubmit={submitSource}>
               <div className="line">
                 <Link size={18}/>
@@ -210,6 +235,21 @@ function App() {
 
         {tab === "settings" && (
           <section className="settingsGrid">
+            <article className="card featured">
+              <h2><span className="ogGlyph">0G</span> 0G Onboarding</h2>
+              <ol>
+                <li>Create or fund Router credit in the 0G Router console.</li>
+                <li>Create a Router API key and choose a model.</li>
+                <li>Paste the endpoint, model, and API key below.</li>
+                <li>Add sources, ask questions, then publish a growth package to 0G Storage.</li>
+              </ol>
+              <div className="quickLinks">
+                <a href="https://pc.0g.ai/" target="_blank" rel="noreferrer">Open 0G Router</a>
+                <a href="https://docs.0g.ai/developer-hub/building-on-0g/compute-network/router/faq" target="_blank" rel="noreferrer">Router FAQ</a>
+                <a href="https://docs.0g.ai/developer-hub/building-on-0g/storage" target="_blank" rel="noreferrer">Storage docs</a>
+              </div>
+            </article>
+
             <article className="card">
               <h2><BrainCircuit size={18}/> BYO 0G Router</h2>
               <label>
@@ -228,6 +268,30 @@ function App() {
                 <input type="checkbox" checked={settings.persistApiKey} onChange={(e) => persistSettings({...settings, persistApiKey: e.target.checked})} />
                 Keep API key in this browser
               </label>
+            </article>
+
+            <article className="card">
+              <h2><UploadCloud size={18}/> 0G Growth Storage</h2>
+              <p className="meta">Publish user-added sources as a portable JSON package to the user's own 0G Storage compatible endpoint.</p>
+              <form className="publishForm" onSubmit={publishTo0g}>
+                <label>
+                  Storage endpoint
+                  <input placeholder="https://your-0g-storage-gateway.example/upload" value={settings.storageEndpoint} onChange={(e) => persistSettings({...settings, storageEndpoint: e.target.value})} />
+                </label>
+                <label>
+                  Storage API key
+                  <input type="password" placeholder="Optional; stored only if enabled" value={settings.storageApiKey} onChange={(e) => persistSettings({...settings, storageApiKey: e.target.value})} />
+                </label>
+                <label className="check">
+                  <input type="checkbox" checked={settings.persistStorageKey} onChange={(e) => persistSettings({...settings, persistStorageKey: e.target.checked})} />
+                  Keep storage key in this browser
+                </label>
+                <div className="buttonRow">
+                  <button type="button" onClick={exportLibrary}><Download size={16}/>Download growth package</button>
+                  <button type="submit" disabled={publishing || !sources.length}>{publishing ? "Publishing..." : "Publish to 0G"}</button>
+                </div>
+              </form>
+              {publishedRef && <div className="notice success">Published reference: {publishedRef}</div>}
             </article>
 
             <article className="card">

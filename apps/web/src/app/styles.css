@@ -29,9 +29,11 @@ aside {
 
 .brand,
 .status,
+.ogBadge,
 aside button,
 h2,
-.danger {
+.danger,
+.buttonRow button {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -40,6 +42,37 @@ h2,
 .brand {
   font-weight: 750;
   margin-bottom: 8px;
+}
+
+.brand img {
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(113, 223, 255, 0.42);
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.ogBadge {
+  width: fit-content;
+  border: 1px solid rgba(84, 204, 240, 0.38);
+  border-radius: 999px;
+  padding: 6px 10px;
+  color: #c4eef9;
+  background: rgba(17, 72, 92, 0.38);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.ogBadge span,
+.ogGlyph {
+  display: inline-grid;
+  min-width: 34px;
+  height: 24px;
+  place-items: center;
+  border-radius: 999px;
+  color: #06181f;
+  background: #58d7f3;
+  font-weight: 850;
 }
 
 .status {
@@ -124,7 +157,8 @@ header p,
 
 .sourceForm,
 .ask,
-.settingsGrid label {
+.settingsGrid label,
+.publishForm {
   display: grid;
   gap: 10px;
 }
@@ -161,6 +195,26 @@ textarea {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 14px;
+}
+
+.onboarding {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 18px;
+  padding: 16px;
+  border: 1px solid #c7e8ef;
+  border-radius: 8px;
+  background: #eef8fa;
+}
+
+.onboarding img {
+  width: 112px;
+  height: 112px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: #071016;
 }
 
 .card,
@@ -201,6 +255,34 @@ textarea {
   gap: 14px;
 }
 
+.featured {
+  grid-column: 1 / -1;
+  border-color: #a9e6f2;
+  background: #f3fbfd;
+}
+
+.featured ol {
+  margin: 0 0 14px;
+  padding-left: 22px;
+}
+
+.quickLinks,
+.buttonRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.quickLinks a {
+  border-radius: 6px;
+  padding: 9px 11px;
+  color: #123f4a;
+  background: #dff6fb;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
 .settingsGrid label {
   color: #45514c;
   font-size: 13px;
@@ -221,6 +303,13 @@ textarea {
   background: #9b2f3d;
   justify-content: center;
   margin-top: 10px;
+}
+
+.success {
+  border-color: #a8d8ba;
+  color: #236339;
+  background: #effaf2;
+  overflow-wrap: anywhere;
 }
 
 .notice {
@@ -249,7 +338,8 @@ textarea {
   }
 
   .line,
-  .twoColumn {
+  .twoColumn,
+  .onboarding {
     grid-template-columns: 1fr;
   }
 

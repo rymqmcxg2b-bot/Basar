@@ -4,9 +4,9 @@ This deployment path keeps public traffic away from the developer machine. The
 default public build is a static browser app: no project backend, no local
 machine, and no shared server-side API key.
 
-Users bring their own 0G Router endpoint, model, and API key. Sources are stored
-in the user's browser storage unless the user exports them or configures their
-own storage.
+Users bring their own 0G Router endpoint, model, API key, and optional 0G
+Storage compatible endpoint. Sources are stored in the user's browser storage
+unless the user exports them or publishes a growth package to their own storage.
 
 Do not expose local `localhost` services for public use.
 
@@ -29,6 +29,13 @@ The deployed site is a static Vite build from `apps/web/dist`.
 The public web app does not include a shared 0G key. Each user enters their own
 Router endpoint, model, and API key in Settings. The key is used from that
 user's browser only.
+
+## 0G Growth Packages
+
+The web UI can package user-added sources and local claim cards into
+`hacker-librarian.growth-package.v1` JSON. Users can download the package or
+publish it to a 0G Storage compatible endpoint they control. Returned URIs,
+root hashes, or object ids can be shared as contribution references.
 
 If 0G Router blocks browser requests with CORS, users need an official browser
 SDK or their own proxy. Do not add a shared proxy with the maintainer's key

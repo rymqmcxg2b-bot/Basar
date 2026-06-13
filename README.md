@@ -1,6 +1,6 @@
 # Hacker Librarian
 
-**A local-first, open-source, censorship-resilient research librarian for preserving sources, evaluating evidence, organizing knowledge, and querying personal or community archives with AI.**
+**A 0G-first, local-first, open-source research librarian for preserving sources, evaluating evidence, organizing knowledge, and querying personal or community archives with user-owned AI compute.**
 
 Hacker Librarian is for people who refuse to outsource truth to a single model, platform, institution, search engine, API gateway, or company. It preserves trails back to evidence, scores sources with explainable rubrics, and answers library questions only from retrieved local sources.
 
@@ -18,6 +18,7 @@ Data Personalism treats data as memory, context, labor, dignity, agency, and the
 - Optional 0G Storage dry-run adapter.
 - FastAPI API, CLI, and browser-local Vite web UI.
 - Public static web mode where users bring their own 0G Router credentials.
+- 0G growth packages for user-contributed source collections.
 - Export support for source and claim cards.
 
 ## Quickstart
@@ -46,9 +47,10 @@ npm run dev
 ```
 
 The public web build is static and does not call this developer machine or a
-shared backend. Users can enter their own 0G Router endpoint, model, and API key
-in the browser UI. Source data is stored in the user's browser storage by
-default.
+shared backend. Users can enter their own 0G Router endpoint, model, API key,
+and storage endpoint in the browser UI. Source data is stored in the user's
+browser storage by default, then can be exported or published as a 0G growth
+package.
 
 Run the optional local API with Docker Compose:
 
