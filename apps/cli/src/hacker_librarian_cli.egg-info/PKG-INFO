@@ -1,0 +1,6 @@
+Metadata-Version: 2.4
+Name: hacker-librarian-cli
+Version: 0.1.0a0
+Summary: CLI for Hacker Librarian
+Requires-Python: >=3.11
+Requires-Dist: hacker-librarian-api

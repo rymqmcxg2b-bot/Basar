@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hacker-librarian.org/schemas/library_export.schema.json",
+  "title": "LibraryExport",
+  "type": "object",
+  "required": ["sources", "claims"],
+  "properties": {
+    "sources": {"type": "array", "items": {"$ref": "source_card.schema.json"}},
+    "claims": {"type": "array", "items": {"$ref": "claim_card.schema.json"}}
+  }
+}

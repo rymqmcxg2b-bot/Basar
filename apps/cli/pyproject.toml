@@ -1,0 +1,12 @@
+[project]
+name = "hacker-librarian-cli"
+version = "0.1.0-alpha"
+description = "CLI for Hacker Librarian"
+requires-python = ">=3.11"
+dependencies = ["hacker-librarian-api"]
+
+[project.scripts]
+hacker-librarian = "hacker_librarian_cli.main:main"
+
+[tool.pytest.ini_options]
+pythonpath = ["src", "../api/src"]

@@ -1,0 +1,30 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_PATH: /app/data/hacker_librarian.sqlite
+      ARCHIVE_DIR: /app/data/archive
+      AI_PROVIDER: mock
+      ZEROG_DRY_RUN: "true"
+    volumes:
+      - hacker_librarian_data:/app/data
+
+  web:
+    image: node:22-alpine
+    working_dir: /app/apps/web
+    command: sh -c "npm install && npm run dev"
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_BASE: http://localhost:8000
+    volumes:
+      - .:/app
+    depends_on:
+      - api
+
+volumes:
+  hacker_librarian_data:

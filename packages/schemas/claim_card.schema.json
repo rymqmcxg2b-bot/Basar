@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hacker-librarian.org/schemas/claim_card.schema.json",
+  "title": "ClaimCard",
+  "type": "object",
+  "required": ["id", "claim", "claim_type", "status", "confidence", "created_at", "updated_at"],
+  "properties": {
+    "id": {"type": "string"},
+    "claim": {"type": "string"},
+    "claim_type": {"enum": ["factual", "empirical", "theoretical", "interpretive", "normative", "predictive", "disputed", "unknown"]},
+    "domains": {"type": "array", "items": {"type": "string"}},
+    "status": {"enum": ["supported", "contested", "contradicted", "insufficient_evidence", "deprecated", "unknown"]},
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+    "supporting_source_ids": {"type": "array", "items": {"type": "string"}},
+    "opposing_source_ids": {"type": "array", "items": {"type": "string"}},
+    "evidence_type": {"type": ["string", "null"]},
+    "uncertainty_notes": {"type": ["string", "null"]},
+    "created_at": {"type": "string"},
+    "updated_at": {"type": "string"},
+    "last_reviewed_at": {"type": ["string", "null"]}
+  }
+}

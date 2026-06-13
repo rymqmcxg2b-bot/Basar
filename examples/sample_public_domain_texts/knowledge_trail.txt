@@ -1,0 +1,1 @@
+This self-authored CC0 example says a research library should preserve evidence trails, source metadata, timestamps, and uncertainty notes.

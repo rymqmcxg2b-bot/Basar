@@ -1,0 +1,19 @@
+[project]
+name = "hacker-librarian-api"
+version = "0.1.0-alpha"
+description = "Local-first research librarian API"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.110",
+  "uvicorn[standard]>=0.27",
+  "pydantic>=2.6",
+  "pydantic-settings>=2.2",
+  "httpx>=0.26"
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8.0", "pytest-asyncio>=0.23"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["src/hacker_librarian_api/tests"]

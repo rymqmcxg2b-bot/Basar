@@ -1,0 +1,17 @@
+name: Connector request
+description: Request a source, model, or storage connector
+title: "[Connector]: "
+labels: ["connector", "good first issue"]
+body:
+  - type: input
+    id: connector
+    attributes:
+      label: Connector name
+    validations:
+      required: true
+  - type: textarea
+    id: provenance
+    attributes:
+      label: Provenance and data handling notes
+    validations:
+      required: true

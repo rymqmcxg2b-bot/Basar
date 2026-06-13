@@ -1,0 +1,31 @@
+{
+  "id": "src_example",
+  "title": "Self-authored CC0 knowledge trail note",
+  "source_type": "primary_document",
+  "authors": ["Hacker Librarian contributors"],
+  "url": null,
+  "identifiers": {"doi": null, "isbn": null, "arxiv_id": null, "other": {}},
+  "publication_date": null,
+  "acquired_at": "2026-06-14T00:00:00Z",
+  "acquired_from": "examples/sample_public_domain_texts/knowledge_trail.txt",
+  "local_path": "examples/sample_public_domain_texts/knowledge_trail.txt",
+  "archived_uri": null,
+  "content_hash": null,
+  "language": "en",
+  "domains": ["research"],
+  "tags": ["cc0", "example"],
+  "quality": {
+    "score": 0,
+    "tier": "unscored",
+    "reasons": [],
+    "evidence_type": "self-authored example",
+    "needs_verification": true,
+    "primary_source_status": "unknown",
+    "conflict_of_interest_notes": null,
+    "verification_warnings": []
+  },
+  "summary": "A small self-authored example about preserving evidence trails.",
+  "extracted_claim_ids": [],
+  "created_at": "2026-06-14T00:00:00Z",
+  "updated_at": "2026-06-14T00:00:00Z"
+}

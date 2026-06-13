@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hacker-librarian.org/schemas/source_card.schema.json",
+  "title": "SourceCard",
+  "type": "object",
+  "required": ["id", "title", "source_type", "quality", "created_at", "updated_at"],
+  "properties": {
+    "id": {"type": "string"},
+    "title": {"type": "string"},
+    "authors": {"type": "array", "items": {"type": "string"}},
+    "source_type": {"enum": ["primary_document", "academic_paper", "book", "dataset", "official_record", "legal_document", "news_report", "commentary", "social_media", "code_repository", "web_page", "unknown"]},
+    "url": {"type": ["string", "null"]},
+    "identifiers": {"type": "object"},
+    "publication_date": {"type": ["string", "null"]},
+    "acquired_at": {"type": "string"},
+    "acquired_from": {"type": ["string", "null"]},
+    "local_path": {"type": ["string", "null"]},
+    "archived_uri": {"type": ["string", "null"]},
+    "content_hash": {"type": ["string", "null"]},
+    "language": {"type": "string"},
+    "domains": {"type": "array", "items": {"type": "string"}},
+    "tags": {"type": "array", "items": {"type": "string"}},
+    "quality": {"type": "object"},
+    "summary": {"type": ["string", "null"]},
+    "extracted_claim_ids": {"type": "array", "items": {"type": "string"}},
+    "created_at": {"type": "string"},
+    "updated_at": {"type": "string"}
+  }
+}
