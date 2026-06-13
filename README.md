@@ -1,5 +1,7 @@
 # Hacker Librarian
 
+![Hacker Librarian hero](assets/hacker-librarian-hero.png)
+
 **A 0G-first, local-first, open-source research librarian for preserving sources, evaluating evidence, organizing knowledge, and querying personal or community archives with user-owned AI compute.**
 
 Hacker Librarian is built for people who do not want truth, memory, or research infrastructure to depend on a single model, platform, institution, search engine, API gateway, or company.
