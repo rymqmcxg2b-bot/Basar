@@ -2,8 +2,10 @@
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from hacker_librarian_api.config import get_settings
 from hacker_librarian_api.routes import ask, claims, export, health, ingest, og, sources
 
+settings = get_settings()
 
 app = FastAPI(
     title="Hacker Librarian API",
@@ -13,8 +15,8 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=settings.cors_origins,
+    allow_credentials="*" not in settings.cors_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )

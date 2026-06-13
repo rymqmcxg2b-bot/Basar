@@ -1,0 +1,38 @@
+services:
+  - type: web
+    name: hacker-librarian-api
+    runtime: docker
+    dockerfilePath: apps/api/Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_PATH
+        value: /var/data/hacker_librarian.sqlite
+      - key: ARCHIVE_DIR
+        value: /var/data/archive
+      - key: AI_PROVIDER
+        value: mock
+      - key: CORS_ALLOW_ORIGINS
+        value: "*"
+      - key: ZEROG_DRY_RUN
+        value: "true"
+      - key: ZEROG_COMPUTE_ENDPOINT
+        value: https://router-api.0g.ai/v1
+    disk:
+      name: hacker-librarian-data
+      mountPath: /var/data
+      sizeGB: 1
+
+  - type: web
+    name: hacker-librarian-web
+    runtime: static
+    rootDir: apps/web
+    buildCommand: npm ci && npm run build
+    staticPublishPath: apps/web/dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_BASE
+        value: https://hacker-librarian-api.onrender.com
