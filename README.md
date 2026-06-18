@@ -1,6 +1,6 @@
 # Basar
 
-![Basar hero](assets/basar-hero.png)
+![Basar logo](assets/basar-logo.png)
 
 **Basar is a multi-AI evidence workspace powered by 0G.**
 
