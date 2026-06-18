@@ -27,9 +27,9 @@ Zero Cup demo path. Each selected AI profile uses a user-owned Router endpoint,
 model, and API key. Basar then records provider/model/status metadata and can
 export or publish the resulting `basar.growth-package.v1` package.
 
-**Demo flow:** add sources, configure multiple 0G AI profiles, run AI Bench,
-compare answer cards, inspect the 0G proof panel, then export or publish the
-growth package.
+**Demo flow:** add sources, configure multiple 0G AI profiles, open the Review
+workspace, run the parallel AI Bench review, compare answer cards, inspect the
+0G proof panel, then export or publish the growth package.
 
 **Local fallback:** Local mode is the offline fallback. The Zero Cup demo path
 uses 0G Router as the active inference layer.

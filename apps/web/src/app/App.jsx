@@ -282,7 +282,7 @@ function App() {
           <section className="flowSection" aria-labelledby="review-question">
             <div className="sectionHeader">
               <div>
-                <p className="eyebrow">Question</p>
+                <p className="eyebrow">AI Bench / Parallel Review</p>
                 <h2 id="review-question">Run review</h2>
               </div>
               <span className="smallStatus">Enabled AI profiles: {enabledProfileCount}</span>

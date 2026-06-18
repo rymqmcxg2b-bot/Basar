@@ -15,9 +15,10 @@ review record into a user-owned archive.
 
 ## Solution
 
-Basar is a browser-local evidence workspace. Users add lawful source text, run
-AI Bench across selected 0G Router profiles, compare answer cards, and preserve
-the review as a `basar.growth-package.v1` package.
+Basar is a browser-local evidence workspace. Users add lawful source text, open
+the Review workspace, run the parallel AI Bench review across selected 0G
+Router profiles, compare answer cards, and preserve the review as a
+`basar.growth-package.v1` package.
 
 ## What 0G Does
 
@@ -32,12 +33,12 @@ the review as a `basar.growth-package.v1` package.
 ## Demo Flow
 
 1. Load or add lawful sources.
-2. Open AI Bench.
-3. Configure multiple 0G AI profiles.
-4. Ask one question.
+2. Configure multiple 0G AI profiles.
+3. Open the Review workspace.
+4. Run the parallel AI Bench review with one question.
 5. Basar retrieves the same evidence package for every selected profile.
 6. Each profile independently returns one answer card.
-7. Inspect the AI Bench 0G Proof Panel.
+7. Inspect the 0G Proof Panel.
 8. Export or publish the portable growth package.
 
 Local mode is the offline fallback. The Zero Cup demo path uses 0G Router as the
@@ -63,12 +64,12 @@ npm run build
 npm run dev
 ```
 
-Manual AI Bench test:
+Manual Review / AI Bench test:
 
 1. Open the web app.
 2. Load the demo source or add a lawful source.
 3. Add two AI profiles with user-owned 0G Router credentials.
-4. Ask one question in AI Bench.
+4. Open the Review workspace and run one parallel AI Bench review.
 5. Confirm each answer card shows profile, provider, model, status, answer,
    citations, and uncertainty or error.
 6. Export the growth package and confirm it includes `parallel_reviews`.
