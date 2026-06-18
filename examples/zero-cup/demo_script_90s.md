@@ -1,33 +1,51 @@
-# 90 Second Zero Cup Demo Script
+90 Second Zero Cup Demo Script
 
-## 0-10s
+0-10s
 
-Basar is a multi-AI evidence workspace powered by 0G. It sends the same source
-package to multiple 0G Router models and preserves the answer cards.
+Basar is a multi-AI evidence workspace powered by 0G. Instead of copying the
+same context into different AI tools, users add their sources once and send the
+same evidence package to multiple 0G Router models.
 
-## 10-25s
+10-25s
 
 Load the demo source. Show that source cards and claim cards are created in the
-browser library without a shared backend.
+browser library without a shared backend or a founder-owned database.
 
-## 25-45s
+Basar turns user-provided material into reusable evidence context for multiple
+AI models.
 
-Open AI Bench. Show multiple user-owned 0G AI profiles: endpoint, model, API
-key, and enabled state.
+25-45s
 
-## 45-65s
+Open AI Bench. Show multiple user-owned 0G AI profiles: endpoint, model, masked
+API key, and enabled state.
 
-Ask: "How does Basar use 0G?" Show one answer card per enabled profile. Each
-card shows provider, model, status, answer, citations, and uncertainty or error.
+Each profile can review the same evidence package independently, while the user
+keeps control of credentials and model selection.
 
-## 65-80s
+45-65s
+
+Ask: “How does Basar use 0G?”
+
+Show one answer card per enabled profile. Each card shows provider, model,
+status, answer, citations, and uncertainty or error metadata.
+
+The key point: every AI reviews the same sources, but Basar keeps the answers
+separate and comparable.
+
+65-80s
 
 Show the AI Bench 0G Proof Panel: enabled profile count, successful provider
-count, failed provider count, and last run timestamp. Then download the
-`basar.growth-package.v1` JSON package and point to `parallel_reviews`.
+count, failed provider count, and last run timestamp.
 
-## 80-90s
+Then download the basar.growth-package.v1 JSON package and point to
+parallel_reviews, where Basar preserves the sources, model responses,
+citations, and review metadata.
+
+80-90s
 
 Close with the honest boundary: local mode is the offline fallback; the Zero Cup
 demo path uses 0G Router as the active inference layer and preserves portable
 review records.
+
+Basar is not another AI assistant. It is the evidence layer for many 0G AIs:
+same sources, multiple reviews, preserved citations, portable research memory.
