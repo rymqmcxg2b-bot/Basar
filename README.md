@@ -112,8 +112,6 @@ docker compose up
 
 Docker Compose is for local development only. The public web demo is static and uses user-provided 0G Router credentials in the browser.
 
-For maintainer release steps, see [docs/release-playbook.md](docs/release-playbook.md).
-
 ## Principles
 
 1. Do not outsource truth to a single model.
