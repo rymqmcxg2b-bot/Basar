@@ -26,6 +26,9 @@ jobs:
       - name: Build web app
         working-directory: apps/web
         run: npm ci && npm run build
+      - name: Run Zero Cup web smoke
+        working-directory: apps/web
+        run: npm run smoke:zero-cup
       - name: Block obvious secrets
         run: |
           ! grep -RInE '(BEGIN RSA|BEGIN OPENSSH|password\s*=\s*[^[:space:]]+|api[_-]?key\s*[:=]\s*["'\'']?[A-Za-z0-9_\-]{24,}|private[_-]?key\s*[:=]\s*["'\'']?[A-Za-z0-9_\-]{24,})' \

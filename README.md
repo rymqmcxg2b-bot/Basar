@@ -2,13 +2,42 @@
 
 ![Basar hero](assets/basar-hero.png)
 
-**A 0G-first, local-first, open-source research librarian for preserving sources, evaluating evidence, organizing knowledge, and querying personal or community archives with user-owned AI compute.**
+**Basar is a multi-AI evidence workspace powered by 0G.**
+
+Ask multiple 0G AI models the same question over the same sources, compare
+their answer cards, preserve citations, and export or publish a portable growth
+package.
 
 Basar is built for people who do not want truth, memory, or research infrastructure to depend on a single model, platform, institution, search engine, API gateway, or company.
 
 It preserves trails back to evidence, scores sources with explainable rubrics, and answers research questions only from retrieved local or user-selected sources.
 
 The project is also designed to encourage meaningful participation in the 0G ecosystem: using 0G-compatible AI inference, contributing source collections, experimenting with decentralized storage workflows, and turning real research archives into useful network activity.
+
+## Zero Cup Submission
+
+**Project title:** Basar — Multi-AI Evidence Workspace Powered by 0G
+
+**Short summary:** Basar lets users add lawful source text, send the same
+evidence package to multiple 0G Router-backed AI profiles, compare cited answer
+cards, and preserve the review as a portable growth package.
+
+**What 0G does in the app:** 0G Router is the active inference layer for the
+Zero Cup demo path. Each selected AI profile uses a user-owned Router endpoint,
+model, and API key. Basar then records provider/model/status metadata and can
+export or publish the resulting `basar.growth-package.v1` package.
+
+**Demo flow:** add sources, configure multiple 0G AI profiles, run AI Bench,
+compare answer cards, inspect the 0G proof panel, then export or publish the
+growth package.
+
+**Local fallback:** Local mode is the offline fallback. The Zero Cup demo path
+uses 0G Router as the active inference layer.
+
+- Submission audit: [docs/ZERO_CUP_SUBMISSION.md](docs/ZERO_CUP_SUBMISSION.md)
+- 0G integration notes: [docs/0g-integration.md](docs/0g-integration.md)
+- Demo script and sample sources: [examples/zero-cup](examples/zero-cup)
+- Live demo target: https://rymqmcxg2b-bot.github.io/basar/
 
 ## Why It Exists
 
@@ -25,7 +54,8 @@ The goal is not to replace human judgment with an oracle. The goal is to give in
 - Deterministic source quality scoring with reasons and warnings.
 - Mock AI provider that works without paid APIs.
 - OpenAI-compatible, Ollama-compatible, and 0G Compute provider scaffolds.
-- Optional 0G Storage dry-run adapter.
+- AI Bench for parallel 0G Router reviews over the same evidence package.
+- Local fallback plus 0G Router and 0G-compatible storage demo path.
 - FastAPI API, CLI, and browser-local Vite web UI.
 - Public static web mode where users bring their own 0G Router credentials.
 - 0G growth packages for user-contributed source collections.
@@ -64,6 +94,7 @@ Run the web UI:
 ```bash
 cd apps/web
 npm install
+npm run smoke:zero-cup
 npm run dev
 ```
 
@@ -108,7 +139,7 @@ This project provides preservation, indexing, metadata, source scoring, and cita
 
 ## Current 0G Support
 
-The public web UI is 0G-first and user-owned: users configure their own 0G Router settings, package source collections for 0G-oriented storage workflows, and keep credentials in their own browser. The optional API remains available for local development and self-hosted deployments.
+The public web UI is 0G-first and user-owned: users configure their own 0G Router settings, package source collections for 0G-oriented storage workflows, and keep credentials in their own browser. The API remains available for local development and self-hosted deployments.
 
 ## Non-Goals
 

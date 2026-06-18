@@ -194,6 +194,82 @@ header p,
   margin-top: 4px;
 }
 
+.proofPanel {
+  display: grid;
+  gap: 12px;
+  margin: 0 0 18px;
+  border: 1px solid #b8d7df;
+  border-radius: 8px;
+  padding: 14px;
+  background: #f0f8f9;
+}
+
+.proofTitle {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.proofTitle h2,
+.proofTitle p {
+  margin: 0;
+}
+
+.proofTitle p,
+.proofPrivacy {
+  color: #5f6a66;
+  font-size: 13px;
+}
+
+.proofGrid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.proofItem {
+  min-width: 0;
+  border: 1px solid #d5ded9;
+  border-radius: 8px;
+  padding: 10px;
+  background: white;
+}
+
+.proofItem.ready {
+  border-color: #9ed6c1;
+  background: #f1faf5;
+}
+
+.proofItem.errorState {
+  border-color: #e3a5ad;
+  background: #fff3f4;
+}
+
+.proofItem.wide {
+  grid-column: span 2;
+}
+
+.proofItem span,
+.proofItem strong {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.proofItem span {
+  color: #64716c;
+  font-size: 12px;
+}
+
+.proofItem strong {
+  margin-top: 4px;
+  color: #123f4a;
+  font-size: 14px;
+}
+
+.proofPrivacy {
+  margin: 0;
+}
+
 .sourceForm,
 .ask,
 .settingsGrid label,
@@ -312,6 +388,54 @@ textarea {
   grid-column: 1 / -1;
 }
 
+.benchGrid {
+  display: grid;
+  gap: 14px;
+}
+
+.benchProof,
+.profileForm,
+.benchAsk {
+  width: 100%;
+}
+
+.proofGrid.compact {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.profileLine {
+  grid-template-columns: minmax(130px, 0.7fr) minmax(190px, 1.2fr) minmax(120px, 0.8fr) minmax(150px, 1fr) auto;
+}
+
+.profileList,
+.answerGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.profileCard {
+  display: grid;
+  gap: 10px;
+}
+
+.profileCard label {
+  display: grid;
+  gap: 7px;
+  color: #45514c;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.answer.failed {
+  border-color: #e3a5ad;
+}
+
+.errorText {
+  color: #7a1d2a;
+  overflow-wrap: anywhere;
+}
+
 .panel {
   background: #eef2ef;
 }
@@ -405,10 +529,16 @@ textarea {
   }
 
   .line,
+  .profileLine,
   .twoColumn,
   .onboarding,
-  .metricBar {
+  .metricBar,
+  .proofGrid {
     grid-template-columns: 1fr;
+  }
+
+  .proofItem.wide {
+    grid-column: auto;
   }
 
   h1 {

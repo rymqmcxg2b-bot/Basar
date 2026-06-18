@@ -1,0 +1,16 @@
+[
+  {
+    "id": "zero_cup_demo_source_1",
+    "title": "Basar Zero Cup Demo Source",
+    "url": "https://example.org/basar-zero-cup-demo",
+    "license": "CC0-1.0",
+    "content": "Basar is a 0G-first evidence librarian. It helps users add lawful source text, ask questions through their own 0G Router credentials, inspect cited evidence, and export or publish portable growth packages to a user-controlled 0G-compatible storage endpoint."
+  },
+  {
+    "id": "zero_cup_demo_source_2",
+    "title": "Growth Package Demo Note",
+    "url": "https://example.org/basar-growth-package-demo",
+    "license": "CC0-1.0",
+    "content": "A Basar growth package records sources, claims, contribution metadata, source counts, claim counts, and the 0G ecosystem context. It is designed to move a research archive beyond a single browser without using a shared backend key."
+  }
+]

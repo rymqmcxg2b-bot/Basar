@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "vite build",
-    "preview": "vite preview --host 0.0.0.0"
+    "preview": "vite preview --host 0.0.0.0",
+    "smoke:zero-cup": "node scripts/smoke-zero-cup.mjs"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^5.2.0",

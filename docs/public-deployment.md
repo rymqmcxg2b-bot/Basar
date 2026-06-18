@@ -4,9 +4,10 @@ This deployment path keeps public traffic away from the developer machine. The
 default public build is a static browser app: no project backend, no local
 machine, and no shared server-side API key.
 
-Users bring their own 0G Router endpoint, model, API key, and optional 0G
-Storage compatible endpoint. Sources are stored in the user's browser storage
-unless the user exports them or publishes a growth package to their own storage.
+Users bring their own 0G Router endpoint, model, API key, and 0G Storage
+compatible endpoint for the full demo path. Sources are stored in the user's
+browser storage unless the user exports them or publishes a growth package to
+their own storage.
 
 Do not expose local `localhost` services for public use.
 
