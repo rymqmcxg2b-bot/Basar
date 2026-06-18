@@ -6,12 +6,12 @@ services:
     ports:
       - "8000:8000"
     environment:
-      DATABASE_PATH: /app/data/hacker_librarian.sqlite
+      DATABASE_PATH: /app/data/basar.sqlite
       ARCHIVE_DIR: /app/data/archive
       AI_PROVIDER: mock
       ZEROG_DRY_RUN: "true"
     volumes:
-      - hacker_librarian_data:/app/data
+      - basar_data:/app/data
 
   web:
     image: node:22-alpine
@@ -27,4 +27,4 @@ services:
       - api
 
 volumes:
-  hacker_librarian_data:
+  basar_data:

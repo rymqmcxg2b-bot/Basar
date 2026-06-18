@@ -1,23 +1,22 @@
 import React, {useEffect, useMemo, useState} from "react";
 import {createRoot} from "react-dom/client";
-import {
-  BookOpen,
-  BrainCircuit,
-  Database,
-  Download,
-  FileQuestion,
-  Gauge,
-  Link,
-  Settings,
-  ShieldCheck,
-  UploadCloud,
-  Trash2,
-} from "lucide-react";
+import BookOpen from "lucide-react/dist/esm/icons/book-open.js";
+import BrainCircuit from "lucide-react/dist/esm/icons/brain-circuit.js";
+import Database from "lucide-react/dist/esm/icons/database.js";
+import Download from "lucide-react/dist/esm/icons/download.js";
+import FileQuestion from "lucide-react/dist/esm/icons/file-question.js";
+import Gauge from "lucide-react/dist/esm/icons/gauge.js";
+import Link from "lucide-react/dist/esm/icons/link.js";
+import Settings from "lucide-react/dist/esm/icons/settings.js";
+import ShieldCheck from "lucide-react/dist/esm/icons/shield-check.js";
+import Trash2 from "lucide-react/dist/esm/icons/trash-2.js";
+import UploadCloud from "lucide-react/dist/esm/icons/upload-cloud.js";
 import {downloadJson} from "../lib/export";
 import {
   askWithRouter,
   buildGrowthPackage,
   clearLibrary,
+  createDemoSource,
   createSource,
   extractClaims,
   loadClaims,
@@ -62,6 +61,9 @@ function App() {
   const storageMode = settings.apiKey && settings.model ? "0G Router ready" : "Local browser mode";
   const evidencePreview = useMemo(() => searchSources(sources, question || "evidence source", 3), [question, sources]);
   const growthPackage = useMemo(() => buildGrowthPackage({sources, claims, settings}), [claims, settings, sources]);
+  const averageScore = sources.length
+    ? Math.round(sources.reduce((sum, source) => sum + (source.quality?.score || 0), 0) / sources.length)
+    : 0;
 
   function persistSources(nextSources) {
     setSources(nextSources);
@@ -106,7 +108,7 @@ function App() {
   }
 
   function exportLibrary() {
-    downloadJson("hacker-librarian-0g-growth-package.json", growthPackage);
+    downloadJson("basar-0g-growth-package.json", growthPackage);
   }
 
   async function publishTo0g(event) {
@@ -129,12 +131,24 @@ function App() {
     setAnswer(null);
   }
 
+  function loadDemoSource() {
+    if (sources.some((source) => source.title === "Basar demo source")) {
+      setTab("ask");
+      setQuestion("What should Basar preserve?");
+      return;
+    }
+    const demo = createDemoSource();
+    persistSources([demo, ...sources]);
+    setTab("ask");
+    setQuestion("What should Basar preserve?");
+  }
+
   return (
     <main>
       <aside>
         <div className="brand">
-          <img src={`${import.meta.env.BASE_URL}hacker-librarian-mark.png`} alt="Hacker Librarian mark"/>
-          <span>Hacker Librarian</span>
+          <img src={`${import.meta.env.BASE_URL}basar-mark.png`} alt="Basar mark"/>
+          <span>Basar</span>
         </div>
         <div className="ogBadge"><span>0G</span> ecosystem tool</div>
         <div className="status"><ShieldCheck size={16}/>{storageMode}</div>
@@ -148,20 +162,30 @@ function App() {
       <section className="content">
         <header>
           <div>
-            <h1>Hacker Librarian</h1>
+            <h1>Basar</h1>
             <p>0G-first source preservation: local by default, user-owned Router compute, and portable growth packages for 0G storage.</p>
           </div>
-          <button className="iconButton" onClick={exportLibrary} title="Export library">
-            <Download size={18}/>
-          </button>
+          <div className="headerActions">
+            <button onClick={loadDemoSource}><BookOpen size={17}/>Load demo</button>
+            <button className="iconButton" onClick={exportLibrary} title="Export library">
+              <Download size={18}/>
+            </button>
+          </div>
         </header>
+
+        <div className="metricBar">
+          <div><strong>{sources.length}</strong><span>Sources</span></div>
+          <div><strong>{claims.length}</strong><span>Claim cards</span></div>
+          <div><strong>{averageScore}</strong><span>Avg score</span></div>
+          <div><strong>{storageMode}</strong><span>Compute mode</span></div>
+        </div>
 
         {error && <div className="notice error">{error}</div>}
 
         {tab === "sources" && (
           <section>
             <div className="onboarding">
-              <img src={`${import.meta.env.BASE_URL}hacker-librarian-mark.png`} alt="Hacker Librarian"/>
+              <img src={`${import.meta.env.BASE_URL}basar-mark.png`} alt="Basar"/>
               <div>
                 <h2>Grow the 0G knowledge layer</h2>
                 <p>Add lawful source text, ask with your own 0G Router key, then publish a growth package to your own 0G Storage endpoint so this library can move beyond one browser.</p>
@@ -191,8 +215,15 @@ function App() {
                   <ul>{(source.quality?.reasons || []).map((reason) => <li key={reason}>{reason}</li>)}</ul>
                 </article>
               ))}
-              {!sources.length && <p className="empty">No sources yet. Add source text to build a browser-local library.</p>}
             </div>
+            {!sources.length && (
+              <article className="emptyCard">
+                <BookOpen size={24}/>
+                <h2>Start with a demo source</h2>
+                <p>Use the built-in demo to test retrieval, claim extraction, and growth package export without adding private data.</p>
+                <button onClick={loadDemoSource}>Load demo source</button>
+              </article>
+            )}
           </section>
         )}
 
@@ -200,6 +231,11 @@ function App() {
           <section className="twoColumn">
             <form className="ask" onSubmit={submitAsk}>
               <textarea value={question} onChange={(e) => setQuestion(e.target.value)} placeholder="Ask a question about your saved sources" required />
+              <div className="suggestions">
+                {["What should Basar preserve?", "What is a growth package?", "Where does my data stay?"].map((prompt) => (
+                  <button type="button" key={prompt} onClick={() => setQuestion(prompt)}>{prompt}</button>
+                ))}
+              </div>
               <button type="submit" disabled={busy || !question.trim()}>{busy ? "Asking..." : "Ask Library"}</button>
             </form>
             <div className="panel">

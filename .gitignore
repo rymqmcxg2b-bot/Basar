@@ -3,9 +3,11 @@
 *.db
 data/
 artifacts/
+docs/basar-handoff/
 node_modules/
 dist/
 __pycache__/
+*.egg-info/
 .pytest_cache/
 .ruff_cache/
 .DS_Store

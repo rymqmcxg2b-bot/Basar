@@ -33,7 +33,9 @@ aside {
 aside button,
 h2,
 .danger,
-.buttonRow button {
+.buttonRow button,
+.headerActions,
+.headerActions button {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -121,6 +123,11 @@ header {
   margin-bottom: 24px;
 }
 
+.headerActions {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
 h1 {
   font-size: 34px;
   line-height: 1.1;
@@ -153,6 +160,38 @@ header p,
   padding: 0;
   display: grid;
   place-items: center;
+}
+
+.metricBar {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0 0 18px;
+}
+
+.metricBar div {
+  min-width: 0;
+  border: 1px solid #d8ded9;
+  border-radius: 8px;
+  padding: 12px;
+  background: white;
+}
+
+.metricBar strong,
+.metricBar span {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.metricBar strong {
+  color: #123f4a;
+  font-size: 18px;
+}
+
+.metricBar span {
+  color: #64716c;
+  font-size: 12px;
+  margin-top: 4px;
 }
 
 .sourceForm,
@@ -219,11 +258,26 @@ textarea {
 
 .card,
 .panel,
-.notice {
+.notice,
+.emptyCard {
   background: white;
   border: 1px solid #d8ded9;
   border-radius: 8px;
   padding: 16px;
+}
+
+.emptyCard {
+  display: grid;
+  justify-items: start;
+  gap: 8px;
+  margin-top: 14px;
+  border-color: #b8e2df;
+  background: #f4fbfa;
+}
+
+.emptyCard h2,
+.emptyCard p {
+  margin: 0;
 }
 
 .card ul {
@@ -239,6 +293,19 @@ textarea {
   display: grid;
   grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
   gap: 14px;
+}
+
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.suggestions button {
+  border: 1px solid #c8d0cc;
+  background: #f6f8f5;
+  color: #30413b;
+  font-size: 13px;
 }
 
 .twoColumn .answer {
@@ -339,11 +406,20 @@ textarea {
 
   .line,
   .twoColumn,
-  .onboarding {
+  .onboarding,
+  .metricBar {
     grid-template-columns: 1fr;
   }
 
   h1 {
     font-size: 28px;
+  }
+
+  header {
+    display: grid;
+  }
+
+  .headerActions {
+    justify-content: flex-start;
   }
 }

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://basar.org/schemas/knowledge_card.schema.json",
+  "title": "KnowledgeCard",
+  "type": "object",
+  "required": ["id", "title", "summary", "validation_status", "created_at", "updated_at"],
+  "properties": {
+    "id": {"type": "string"},
+    "title": {"type": "string"},
+    "summary": {"type": "string"},
+    "source_ids": {"type": "array", "items": {"type": "string"}},
+    "claim_ids": {"type": "array", "items": {"type": "string"}},
+    "evidence_notes": {"type": "array", "items": {"type": "string"}},
+    "validation_status": {"enum": ["draft", "needs_review", "reviewed", "deprecated"]},
+    "validation_notes": {"type": "array", "items": {"type": "string"}},
+    "provenance": {"type": "array", "items": {"type": "string"}},
+    "storage_pointer": {"type": ["string", "null"]},
+    "created_at": {"type": "string"},
+    "updated_at": {"type": "string"}
+  }
+}

@@ -23,12 +23,25 @@ git push origin v0.1.0-alpha
   - 資料治理聲明
 
 - 可選：先生成本地上架套件（不含 `.git`、`data`、`node_modules`）：
+- 可選：先生成本地上架套件（不含 `.git`、`.env*`、`data`、`node_modules`、`docs/basar-handoff`）：
 
 ```bash
 ./scripts/release_pack.sh v0.1.0-alpha
 ```
 
-會輸出 `artifacts/hacker-librarian-v0.1.0-alpha.tar.gz`，可作為對外分享壓縮檔。
+會輸出 `artifacts/basar-v0.1.0-alpha.tar.gz`，可作為對外分享壓縮檔。
+
+- 若使用 GitHub 發佈 helper，預設是 dry run：
+
+```bash
+./scripts/publish_github.sh https://github.com/<owner>/basar.git v0.1.0-alpha
+```
+
+通過安全 review 並取得維護者批准後才使用：
+
+```bash
+./scripts/publish_github.sh --execute https://github.com/<owner>/basar.git v0.1.0-alpha
+```
 
 ## 3) 公開展示資源
 

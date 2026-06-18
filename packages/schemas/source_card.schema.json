@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://hacker-librarian.org/schemas/source_card.schema.json",
+  "$id": "https://basar.org/schemas/source_card.schema.json",
   "title": "SourceCard",
   "type": "object",
   "required": ["id", "title", "source_type", "quality", "created_at", "updated_at"],

@@ -1,10 +1,10 @@
-# Hacker Librarian
+# Basar
 
-![Hacker Librarian hero](assets/hacker-librarian-hero.png)
+![Basar hero](assets/basar-hero.png)
 
 **A 0G-first, local-first, open-source research librarian for preserving sources, evaluating evidence, organizing knowledge, and querying personal or community archives with user-owned AI compute.**
 
-Hacker Librarian is built for people who do not want truth, memory, or research infrastructure to depend on a single model, platform, institution, search engine, API gateway, or company.
+Basar is built for people who do not want truth, memory, or research infrastructure to depend on a single model, platform, institution, search engine, API gateway, or company.
 
 It preserves trails back to evidence, scores sources with explainable rubrics, and answers research questions only from retrieved local or user-selected sources.
 
@@ -14,7 +14,7 @@ The project is also designed to encourage meaningful participation in the 0G eco
 
 Data Personalism treats data as memory, context, labor, dignity, agency, and the trace of human judgment.
 
-Hacker Librarian is a reflective infrastructure response to centralization risk. It aims to make research tools local-first, auditable, forkable, source-preserving, and community-extensible without relying on unverified political or conspiracy claims.
+Basar is a reflective infrastructure response to centralization risk. It aims to make research tools local-first, auditable, forkable, source-preserving, and community-extensible without relying on unverified political or conspiracy claims.
 
 The goal is not to replace human judgment with an oracle. The goal is to give individuals and communities better tools to preserve evidence, compare claims, inspect sources, and build their own durable knowledge archives.
 
@@ -33,27 +33,30 @@ The goal is not to replace human judgment with an oracle. The goal is to give in
 
 ## 0G-First Direction
 
-Hacker Librarian treats 0G not only as an AI compute provider, but as a coordination layer for user-owned knowledge infrastructure.
+Basar treats 0G not only as an AI compute provider, but as a coordination layer for user-owned knowledge infrastructure.
 
 The project encourages users to preserve source collections, run retrieval-based research workflows, test 0G-compatible LLM inference, and contribute reusable archive packages that create practical demand for decentralized AI compute and storage.
 
-Instead of empty token consumption, Hacker Librarian focuses on meaningful usage: research, preservation, verification, education, and community memory.
+Instead of empty token consumption, Basar focuses on meaningful usage: research, preservation, verification, education, and community memory.
 
 ## Quickstart
 
 ```bash
 python -m pip install -e 'apps/api[test]'
 python -m pip install -e apps/cli --no-deps
-hacker-librarian init
-hacker-librarian ingest-file examples/sample_public_domain_texts/knowledge_trail.txt
-hacker-librarian ask "What does this library say about evidence trails?"
-python -m pytest apps/api
+basar doctor
+basar demo
+basar status
+python -m pytest apps/api apps/cli
 ```
+
+See the [CLI guide](docs/cli.md) for custom database paths, source search,
+JSON export, and 0G archive dry-runs.
 
 Run the API:
 
 ```bash
-uvicorn hacker_librarian_api.main:app --reload
+uvicorn basar_api.main:app --reload
 ```
 
 Run the web UI:
@@ -109,7 +112,7 @@ The public web UI is 0G-first and user-owned: users configure their own 0G Route
 
 ## Non-Goals
 
-Hacker Librarian is not a piracy platform, copyrighted PDF dump, propaganda engine, harmful-use chatbot, replacement for human source criticism, model-training project from scratch, or centralized SaaS.
+Basar is not a piracy platform, copyrighted PDF dump, propaganda engine, harmful-use chatbot, replacement for human source criticism, model-training project from scratch, or centralized SaaS.
 
 ## Licenses
 

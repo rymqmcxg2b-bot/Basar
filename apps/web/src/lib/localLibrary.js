@@ -1,6 +1,6 @@
-const SOURCES_KEY = "hacker-librarian:sources";
-const CLAIMS_KEY = "hacker-librarian:claims";
-const SETTINGS_KEY = "hacker-librarian:settings";
+const SOURCES_KEY = "basar:sources";
+const CLAIMS_KEY = "basar:claims";
+const SETTINGS_KEY = "basar:settings";
 
 const DEFAULT_SETTINGS = {
   routerEndpoint: "https://router-api.0g.ai/v1",
@@ -11,6 +11,14 @@ const DEFAULT_SETTINGS = {
   storageApiKey: "",
   persistStorageKey: false,
 };
+
+const DEMO_SOURCE_TEXT = [
+  "Basar is a local-first evidence memory layer for research teams and AI agents.",
+  "A source card records where a source came from, when it was acquired, what claims may depend on it, and whether the evidence needs more verification.",
+  "A growth package is a portable JSON archive of user-added sources and extracted claims that can be exported locally or sent to a user-controlled 0G storage endpoint.",
+  "Basar does not require a shared backend for the public web build. The browser library stays on the user's machine unless the user exports it or publishes it with their own 0G credentials.",
+  "Model answers should cite retrieved sources and state uncertainty when evidence is thin.",
+].join(" ");
 
 function readJson(key, fallback) {
   try {
@@ -71,16 +79,25 @@ export function clearLibrary() {
 export function createSource({title, url, content}) {
   const normalizedContent = content.trim();
   const id = `src_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
+  const normalizedUrl = normalizeUrl(url);
   return {
     id,
-    title: title.trim() || new URL(url).hostname,
-    url,
+    title: title.trim() || new URL(normalizedUrl).hostname,
+    url: normalizedUrl,
     source_type: "user_supplied_url",
     acquired_at: new Date().toISOString(),
     summary: summarize(normalizedContent),
     content: normalizedContent,
     quality: scoreSource({url, content: normalizedContent}),
   };
+}
+
+export function createDemoSource() {
+  return createSource({
+    title: "Basar demo source",
+    url: "https://example.org/basar-demo-source",
+    content: DEMO_SOURCE_TEXT,
+  });
 }
 
 export function searchSources(sources, question, limit = 5) {
@@ -110,7 +127,7 @@ export async function askWithRouter({settings, question, evidence}) {
         {
           role: "system",
           content:
-            "You are Hacker Librarian. Answer only from the provided sources. Cite source ids in brackets. State uncertainty when evidence is thin.",
+            "You are Basar. Answer only from the provided sources. Cite source ids in brackets. State uncertainty when evidence is thin.",
         },
         {
           role: "user",
@@ -136,7 +153,7 @@ export async function askWithRouter({settings, question, evidence}) {
 
 export function buildGrowthPackage({sources, claims, settings}) {
   return {
-    schema: "hacker-librarian.growth-package.v1",
+    schema: "basar.growth-package.v1",
     created_at: new Date().toISOString(),
     ecosystem: "0g",
     router_endpoint: settings.routerEndpoint,
@@ -234,6 +251,14 @@ function scoreSource({url, content}) {
     reasons,
     needs_verification: true,
   };
+}
+
+function normalizeUrl(url) {
+  const trimmed = url.trim();
+  if (/^https?:\/\//i.test(trimmed)) {
+    return trimmed;
+  }
+  return `https://${trimmed}`;
 }
 
 function summarize(content) {

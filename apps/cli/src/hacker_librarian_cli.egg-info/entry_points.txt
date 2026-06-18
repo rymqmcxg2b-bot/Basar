@@ -1,2 +1,0 @@
-[console_scripts]
-hacker-librarian = hacker_librarian_cli.main:main

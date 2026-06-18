@@ -22,7 +22,7 @@ The deployed site is a static Vite build from `apps/web/dist`.
 
 1. Push this repository to GitHub.
 2. In Render, create a new Blueprint from the repository.
-3. Render creates `hacker-librarian-web`, a static Vite build.
+3. Render creates `basar-web`, a static Vite build.
 
 ## 0G Router
 
@@ -33,7 +33,7 @@ user's browser only.
 ## 0G Growth Packages
 
 The web UI can package user-added sources and local claim cards into
-`hacker-librarian.growth-package.v1` JSON. Users can download the package or
+`basar.growth-package.v1` JSON. Users can download the package or
 publish it to a 0G Storage compatible endpoint they control. Returned URIs,
 root hashes, or object ids can be shared as contribution references.
 

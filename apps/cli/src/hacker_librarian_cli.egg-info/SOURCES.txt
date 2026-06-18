@@ -1,9 +1,0 @@
-pyproject.toml
-src/hacker_librarian_cli/__init__.py
-src/hacker_librarian_cli/main.py
-src/hacker_librarian_cli.egg-info/PKG-INFO
-src/hacker_librarian_cli.egg-info/SOURCES.txt
-src/hacker_librarian_cli.egg-info/dependency_links.txt
-src/hacker_librarian_cli.egg-info/entry_points.txt
-src/hacker_librarian_cli.egg-info/requires.txt
-src/hacker_librarian_cli.egg-info/top_level.txt

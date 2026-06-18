@@ -1,6 +1,6 @@
-# Hacker Librarian Web
+# Basar Web
 
-Static Vite UI for 0G-first, browser-local Hacker Librarian workflows.
+Static Vite UI for 0G-first, browser-local Basar workflows.
 
 ```bash
 npm install

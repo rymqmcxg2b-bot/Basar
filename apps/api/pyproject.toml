@@ -1,7 +1,8 @@
 [project]
-name = "hacker-librarian-api"
+name = "basar-api"
 version = "0.1.0-alpha"
-description = "Local-first research librarian API"
+description = "Local-first Basar API"
+license = { text = "Apache-2.0" }
 requires-python = ">=3.11"
 dependencies = [
   "fastapi>=0.110",
@@ -16,4 +17,4 @@ test = ["pytest>=8.0", "pytest-asyncio>=0.23"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
-testpaths = ["src/hacker_librarian_api/tests"]
+testpaths = ["src/basar_api/tests"]

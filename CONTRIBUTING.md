@@ -1,6 +1,6 @@
 # Contributing
 
-Thank you for helping Hacker Librarian become a better local-first research tool.
+Thank you for helping Basar become a better local-first research tool.
 
 ## Development Setup
 
