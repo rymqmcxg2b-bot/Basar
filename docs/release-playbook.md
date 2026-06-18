@@ -8,39 +8,39 @@
 
 ## 2) 發佈到 GitHub
 
-- 建立/更新版本 tag：
+- 建立新的不可變版本 tag。已經推到 public 的 tag 不要 force-move；
+  若需要補交或修正文案，建立新的日期 tag：
 
 ```bash
-git tag v0.1.0-alpha
-git push origin v0.1.0-alpha
+git tag zero-cup-group-stage-20260618
+git push origin zero-cup-group-stage-20260618
 ```
 
 - 發布 Release Note（可直接貼這份文檔重點）：
 
   - 主要功能
   - 本地-first 保證
-  - 0G-first / user-owned Router 與 growth package 方向
+  - 0G Router AI Bench、parallel review 與 growth package 方向
   - 資料治理聲明
 
-- 可選：先生成本地上架套件（不含 `.git`、`data`、`node_modules`）：
 - 可選：先生成本地上架套件（不含 `.git`、`.env*`、`data`、`node_modules`、`docs/basar-handoff`）：
 
 ```bash
-./scripts/release_pack.sh v0.1.0-alpha
+./scripts/release_pack.sh zero-cup-group-stage-20260618
 ```
 
-會輸出 `artifacts/basar-v0.1.0-alpha.tar.gz`，可作為對外分享壓縮檔。
+會輸出 `artifacts/basar-zero-cup-group-stage-20260618.tar.gz`，可作為對外分享壓縮檔。
 
 - 若使用 GitHub 發佈 helper，預設是 dry run：
 
 ```bash
-./scripts/publish_github.sh https://github.com/<owner>/basar.git v0.1.0-alpha
+./scripts/publish_github.sh https://github.com/rymqmcxg2b-bot/Basar.git zero-cup-group-stage-20260618 docs/ZERO_CUP_SUBMISSION.md
 ```
 
 通過安全 review 並取得維護者批准後才使用：
 
 ```bash
-./scripts/publish_github.sh --execute https://github.com/<owner>/basar.git v0.1.0-alpha
+./scripts/publish_github.sh --execute https://github.com/rymqmcxg2b-bot/Basar.git zero-cup-group-stage-20260618 docs/ZERO_CUP_SUBMISSION.md
 ```
 
 ## 3) 公開展示資源
@@ -56,7 +56,7 @@ git push origin v0.1.0-alpha
 
 - 驗證：
   - 公開靜態頁可達
-  - `license`, `SECURITY.md`, `CODE_OF_CONDUCT.md` 可見
+  - `LICENSE`, `SECURITY.md`, `CODE_OF_CONDUCT.md` 可見
   - `data governance` 規範可見
 - 開啟 issue 範本，固定用 `good first issue` 指引新手貢獻者。
 
