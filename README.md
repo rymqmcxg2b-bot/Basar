@@ -37,7 +37,7 @@ uses 0G Router as the active inference layer.
 - Submission audit: [docs/ZERO_CUP_SUBMISSION.md](docs/ZERO_CUP_SUBMISSION.md)
 - 0G integration notes: [docs/0g-integration.md](docs/0g-integration.md)
 - Demo script and sample sources: [examples/zero-cup](examples/zero-cup)
-- Live demo target: https://rymqmcxg2b-bot.github.io/basar/
+- Live demo target: https://rymqmcxg2b-bot.github.io/Basar/
 
 ## Why It Exists
 
@@ -110,13 +110,9 @@ Run the optional local API with Docker Compose:
 docker compose up
 ```
 
-Do not expose local Docker Compose services for public use.
+Docker Compose is for local development only. The public web demo is static and uses user-provided 0G Router credentials in the browser.
 
-### Publication Checklist
-
-- Run the [release checklist](docs/release-playbook.md) before publishing to GitHub or another platform.
-- Keep credentials in environment variables only.
-- Keep default database and archives local unless the user explicitly configures 0G backup.
+For maintainer release steps, see [docs/release-playbook.md](docs/release-playbook.md).
 
 ## Principles
 
