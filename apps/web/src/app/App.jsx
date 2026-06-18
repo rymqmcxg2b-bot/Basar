@@ -2,10 +2,7 @@ import React, {useEffect, useMemo, useState} from "react";
 import {createRoot} from "react-dom/client";
 import BookOpen from "lucide-react/dist/esm/icons/book-open.js";
 import BrainCircuit from "lucide-react/dist/esm/icons/brain-circuit.js";
-import Database from "lucide-react/dist/esm/icons/database.js";
 import Download from "lucide-react/dist/esm/icons/download.js";
-import FileQuestion from "lucide-react/dist/esm/icons/file-question.js";
-import Gauge from "lucide-react/dist/esm/icons/gauge.js";
 import Link from "lucide-react/dist/esm/icons/link.js";
 import Settings from "lucide-react/dist/esm/icons/settings.js";
 import ShieldCheck from "lucide-react/dist/esm/icons/shield-check.js";
@@ -14,7 +11,6 @@ import UploadCloud from "lucide-react/dist/esm/icons/upload-cloud.js";
 import {downloadJson} from "../lib/export";
 import {
   askManyRouters,
-  askWithRouter,
   buildGrowthPackage,
   clearLibrary,
   createAiProfile,
@@ -34,16 +30,14 @@ import {
 } from "../lib/localLibrary";
 import "./styles.css";
 
-const tabs = [
-  ["sources", Database, "Sources"],
-  ["ask", FileQuestion, "Ask"],
-  ["bench", BrainCircuit, "AI Bench"],
-  ["claims", Gauge, "Claims"],
-  ["settings", Settings, "Settings"],
+const views = [
+  ["review", BrainCircuit, "Review"],
+  ["library", BookOpen, "Library"],
+  ["profiles", Settings, "Profiles"],
 ];
 
 function App() {
-  const [tab, setTab] = useState("sources");
+  const [view, setView] = useState("review");
   const [sources, setSources] = useState([]);
   const [claims, setClaims] = useState([]);
   const [aiProfiles, setAiProfiles] = useState([]);
@@ -51,8 +45,7 @@ function App() {
   const [url, setUrl] = useState("");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [question, setQuestion] = useState("");
-  const [benchQuestion, setBenchQuestion] = useState("");
+  const [reviewQuestion, setReviewQuestion] = useState("");
   const [profileDraft, setProfileDraft] = useState({
     name: "",
     routerEndpoint: "https://router-api.0g.ai/v1",
@@ -60,38 +53,45 @@ function App() {
     apiKey: "",
     enabled: true,
   });
-  const [answer, setAnswer] = useState(null);
-  const [benchResults, setBenchResults] = useState([]);
-  const [benchLastRunAt, setBenchLastRunAt] = useState("");
-  const [busy, setBusy] = useState(false);
-  const [benchBusy, setBenchBusy] = useState(false);
+  const [reviewResults, setReviewResults] = useState([]);
+  const [reviewLastRunAt, setReviewLastRunAt] = useState("");
+  const [reviewBusy, setReviewBusy] = useState(false);
   const [publishing, setPublishing] = useState(false);
   const [error, setError] = useState("");
   const [publishedRef, setPublishedRef] = useState("");
 
   useEffect(() => {
     const loadedSources = loadSources();
+    const loadedClaims = loadClaims();
     setSources(loadedSources);
-    setClaims(loadClaims().length ? loadClaims() : extractClaims(loadedSources));
+    setClaims(loadedClaims.length ? loadedClaims : extractClaims(loadedSources));
     setAiProfiles(loadAiProfiles());
   }, []);
 
-  const storageMode = settings.apiKey && settings.model ? "0G Router ready" : "Local browser mode";
-  const evidencePreview = useMemo(() => searchSources(sources, question || "evidence source", 3), [question, sources]);
-  const growthPackage = useMemo(
-    () => buildGrowthPackage({sources, claims, settings, parallelReviews: benchResults}),
-    [benchResults, claims, settings, sources],
+  const enabledProfiles = useMemo(
+    () => aiProfiles.filter((profile) => profile.enabled),
+    [aiProfiles],
   );
-  const routerConfigured = Boolean(settings.routerEndpoint && settings.model && settings.apiKey);
+  const enabledProfileCount = enabledProfiles.length;
+  const reviewEvidencePreview = useMemo(() => {
+    if (reviewQuestion.trim()) {
+      return searchSources(sources, reviewQuestion, 5);
+    }
+    return sources.slice(0, 5).map((source) => ({
+      ...source,
+      excerpt: source.summary || source.content.slice(0, 240),
+    }));
+  }, [reviewQuestion, sources]);
+  const growthPackage = useMemo(
+    () => buildGrowthPackage({sources, claims, settings, parallelReviews: reviewResults}),
+    [claims, reviewResults, settings, sources],
+  );
+  const successfulProviderCount = reviewResults.filter(
+    (result) => result.status === "fulfilled" && result.provider === "0g-router",
+  ).length;
+  const failedProviderCount = reviewResults.filter((result) => result.status === "rejected").length;
   const storageConfigured = Boolean(settings.storageEndpoint);
-  const lastProvider = answer?.provider || "local";
-  const lastModel = answer?.model || (routerConfigured ? settings.model : "local fallback");
-  const enabledProfileCount = aiProfiles.filter((profile) => profile.enabled).length;
-  const benchSuccessCount = benchResults.filter((result) => result.status === "fulfilled" && result.provider === "0g-router").length;
-  const benchFailedCount = benchResults.filter((result) => result.status === "rejected").length;
-  const averageScore = sources.length
-    ? Math.round(sources.reduce((sum, source) => sum + (source.quality?.score || 0), 0) / sources.length)
-    : 0;
+  const packageReviewCount = growthPackage.parallel_reviews?.length || 0;
 
   function persistSources(nextSources) {
     setSources(nextSources);
@@ -125,21 +125,6 @@ function App() {
     }
   }
 
-  async function submitAsk(event) {
-    event.preventDefault();
-    setBusy(true);
-    setError("");
-    setAnswer(null);
-    try {
-      const evidence = searchSources(sources, question, 5);
-      setAnswer(await askWithRouter({settings, question, evidence}));
-    } catch (err) {
-      setError(`0G Router request failed: ${err.message || err}`);
-    } finally {
-      setBusy(false);
-    }
-  }
-
   function addProfile(event) {
     event.preventDefault();
     setError("");
@@ -166,21 +151,21 @@ function App() {
     persistAiProfiles(aiProfiles.filter((profile) => profile.id !== profileId));
   }
 
-  async function runBench(event) {
+  async function runReview(event) {
     event.preventDefault();
-    setBenchBusy(true);
+    setReviewBusy(true);
     setError("");
-    setBenchResults([]);
+    setReviewResults([]);
     try {
-      const evidence = searchSources(sources, benchQuestion, 5);
-      const reviews = await askManyRouters({profiles: aiProfiles, question: benchQuestion, evidence});
-      const questionStamped = reviews.map((review) => ({...review, question: benchQuestion}));
-      setBenchResults(questionStamped);
-      setBenchLastRunAt(new Date().toISOString());
+      const evidence = searchSources(sources, reviewQuestion, 5);
+      const reviews = await askManyRouters({profiles: aiProfiles, question: reviewQuestion, evidence});
+      const questionStamped = reviews.map((review) => ({...review, question: reviewQuestion}));
+      setReviewResults(questionStamped);
+      setReviewLastRunAt(new Date().toISOString());
     } catch (err) {
-      setError(`AI Bench review failed: ${err.message || err}`);
+      setError(`Parallel review failed: ${err.message || err}`);
     } finally {
-      setBenchBusy(false);
+      setReviewBusy(false);
     }
   }
 
@@ -205,347 +190,385 @@ function App() {
   function resetLibrary() {
     clearLibrary();
     persistSources([]);
-    setAnswer(null);
-    setBenchResults([]);
-    setBenchLastRunAt("");
+    setReviewResults([]);
+    setReviewLastRunAt("");
   }
 
   function loadDemoSource() {
-    if (sources.some((source) => source.title === "Basar demo source")) {
-      setTab("ask");
-      setQuestion("What should Basar preserve?");
-      setBenchQuestion("What should Basar preserve?");
-      return;
+    if (!sources.some((source) => source.title === "Basar demo source")) {
+      const demo = createDemoSource();
+      persistSources([demo, ...sources]);
     }
-    const demo = createDemoSource();
-    persistSources([demo, ...sources]);
-    setTab("ask");
-    setQuestion("What should Basar preserve?");
-    setBenchQuestion("What should Basar preserve?");
+    setView("review");
+    setReviewQuestion("How does Basar use 0G?");
+  }
+
+  function shortEvidenceText(source) {
+    return source.excerpt || source.summary || source.content?.slice(0, 240) || "";
   }
 
   return (
-    <main>
-      <aside>
-        <div className="brand">
-          <img src={`${import.meta.env.BASE_URL}basar-logo.png`} alt="Basar mark"/>
-          <span>Basar</span>
+    <main className="workspace">
+      <header className="workspaceHeader">
+        <div className="identity">
+          <div className="brandLine">
+            <img src={`${import.meta.env.BASE_URL}basar-mark.png`} alt="" aria-hidden="true"/>
+            <span>Basar</span>
+          </div>
+          <h1>Add sources once. Review with many AIs. Keep the evidence.</h1>
+          <p>Same sources. Multiple 0G AI reviews. Portable evidence memory.</p>
         </div>
-        <div className="ogBadge"><span>0G</span> ecosystem tool</div>
-        <div className="status"><ShieldCheck size={16}/>{storageMode}</div>
-        {tabs.map(([id, Icon, label]) => (
-          <button className={tab === id ? "active" : ""} key={id} onClick={() => setTab(id)}>
-            <Icon size={18}/>{label}
+        <div className="topActions">
+          <button type="button" className="secondary" onClick={loadDemoSource}>Load demo source</button>
+          <button type="button" onClick={exportLibrary}>
+            <Download size={16}/>
+            Download growth package
+          </button>
+        </div>
+      </header>
+
+      <nav className="primaryNav" aria-label="Primary">
+        {views.map(([id, Icon, label]) => (
+          <button className={view === id ? "active" : ""} key={id} onClick={() => setView(id)}>
+            <Icon size={16}/>
+            {label}
           </button>
         ))}
-      </aside>
+      </nav>
 
-      <section className="content">
-        <header>
-          <div>
-            <h1>Basar</h1>
-            <p>0G-first source preservation: local by default, user-owned Router compute, and portable growth packages for 0G storage.</p>
-          </div>
-          <div className="headerActions">
-            <button onClick={loadDemoSource}><BookOpen size={17}/>Load demo</button>
-            <button className="iconButton" onClick={exportLibrary} title="Export library">
-              <Download size={18}/>
-            </button>
-          </div>
-        </header>
+      {error && <div className="notice error">{error}</div>}
 
-        <div className="metricBar">
-          <div><strong>{sources.length}</strong><span>Sources</span></div>
-          <div><strong>{claims.length}</strong><span>Claim cards</span></div>
-          <div><strong>{averageScore}</strong><span>Avg score</span></div>
-          <div><strong>{storageMode}</strong><span>Compute mode</span></div>
-        </div>
-
-        <section className="proofPanel" aria-label="0G proof panel">
-          <div className="proofTitle">
-            <ShieldCheck size={20}/>
-            <div>
-              <h2>0G Proof Panel</h2>
-              <p>Zero Cup path: user-owned Router inference plus growth package publishing.</p>
-            </div>
-          </div>
-          <div className="proofGrid">
-            <div className={routerConfigured ? "proofItem ready" : "proofItem"}>
-              <span>Router configured</span>
-              <strong>{routerConfigured ? "yes" : "no"}</strong>
-            </div>
-            <div className={lastProvider === "0g-router" ? "proofItem ready" : "proofItem"}>
-              <span>Last provider</span>
-              <strong>{lastProvider}</strong>
-            </div>
-            <div className="proofItem">
-              <span>Last model</span>
-              <strong>{lastModel}</strong>
-            </div>
-            <div className={storageConfigured ? "proofItem ready" : "proofItem"}>
-              <span>Storage endpoint</span>
-              <strong>{storageConfigured ? "configured" : "not set"}</strong>
-            </div>
-            <div className={publishedRef ? "proofItem ready wide" : "proofItem wide"}>
-              <span>Last publish pointer</span>
-              <strong>{publishedRef || "not published yet"}</strong>
-            </div>
-          </div>
-          <p className="proofPrivacy">No shared backend key. Router and storage calls use only credentials entered in this browser.</p>
-        </section>
-
-        {error && <div className="notice error">{error}</div>}
-
-        {tab === "sources" && (
-          <section>
-            <div className="onboarding">
-              <img src={`${import.meta.env.BASE_URL}basar-logo.png`} alt="Basar"/>
+      {view === "review" && (
+        <section className="viewStack" aria-label="Review workspace">
+          <section className="flowSection" aria-labelledby="review-sources">
+            <div className="sectionHeader">
               <div>
-                <h2>Grow the 0G knowledge layer</h2>
-                <p>Add lawful source text, ask with your own 0G Router key, then publish a growth package to your own 0G Storage endpoint so this library can move beyond one browser.</p>
+                <p className="eyebrow">Evidence</p>
+                <h2 id="review-sources">Sources</h2>
               </div>
+              <button type="button" className="secondary" onClick={loadDemoSource}>Load demo source</button>
             </div>
+
             <form className="sourceForm" onSubmit={submitSource}>
-              <div className="line">
-                <Link size={18}/>
-                <input placeholder="https://example.org/source" value={url} onChange={(e) => setUrl(e.target.value)} required />
-                <input placeholder="Optional title" value={title} onChange={(e) => setTitle(e.target.value)} />
-                <button type="submit">Add</button>
+              <div className="sourceLine">
+                <Link size={16}/>
+                <input placeholder="https://example.org/source" value={url} onChange={(event) => setUrl(event.target.value)} required />
+                <input placeholder="Optional title" value={title} onChange={(event) => setTitle(event.target.value)} />
+                <button type="submit">Add source</button>
               </div>
               <textarea
                 value={content}
-                onChange={(e) => setContent(e.target.value)}
-                placeholder="Paste public-domain, self-authored, licensed, or otherwise lawful source text here."
+                onChange={(event) => setContent(event.target.value)}
+                placeholder="Paste lawful source text here."
                 required
               />
             </form>
 
-            <div className="grid">
-              {sources.map((source) => (
-                <article className="card" key={source.id}>
-                  <h2>{source.title}</h2>
-                  <p>{source.summary}</p>
-                  <div className="meta">{source.id} · score {source.quality?.score ?? 0}</div>
-                  <ul>{(source.quality?.reasons || []).map((reason) => <li key={reason}>{reason}</li>)}</ul>
+            <div className="sourceGrid compactGrid">
+              {reviewEvidencePreview.map((source) => (
+                <article className="sourceCard" key={source.id}>
+                  <div className="cardKicker">{source.id}</div>
+                  <h3>{source.title}</h3>
+                  <p>{shortEvidenceText(source)}</p>
+                  <span>Score {source.quality?.score ?? 0}</span>
                 </article>
               ))}
             </div>
-            {!sources.length && (
-              <article className="emptyCard">
-                <BookOpen size={24}/>
-                <h2>Start with a demo source</h2>
-                <p>Use the built-in demo to test retrieval, claim extraction, and growth package export without adding private data.</p>
-                <button onClick={loadDemoSource}>Load demo source</button>
-              </article>
+            {!reviewEvidencePreview.length && (
+              <p className="emptyText">No matching source text yet. Add a source or load the demo source.</p>
             )}
           </section>
-        )}
 
-        {tab === "ask" && (
-          <section className="twoColumn">
-            <form className="ask" onSubmit={submitAsk}>
-              <textarea value={question} onChange={(e) => setQuestion(e.target.value)} placeholder="Ask a question about your saved sources" required />
-              <div className="suggestions">
-                {["What should Basar preserve?", "What is a growth package?", "Where does my data stay?"].map((prompt) => (
-                  <button type="button" key={prompt} onClick={() => setQuestion(prompt)}>{prompt}</button>
-                ))}
+          <section className="flowSection" aria-labelledby="review-question">
+            <div className="sectionHeader">
+              <div>
+                <p className="eyebrow">Question</p>
+                <h2 id="review-question">Run review</h2>
               </div>
-              <button type="submit" disabled={busy || !question.trim()}>{busy ? "Asking..." : "Ask Library"}</button>
-            </form>
-            <div className="panel">
-              <h2>Evidence Preview</h2>
-              {evidencePreview.map((item) => <p key={item.id}><strong>{item.title}</strong><br/>{item.excerpt}</p>)}
-              {!evidencePreview.length && <p className="empty">Matching excerpts appear here before you ask.</p>}
+              <span className="smallStatus">Enabled AI profiles: {enabledProfileCount}</span>
             </div>
-            {answer && (
-              <article className="card answer">
-                <h2>Answer</h2>
-                <p>{answer.answer}</p>
-                <div className="meta">Provider: {answer.provider} · Model: {answer.model} · Citations: {answer.citations.length ? answer.citations.join(", ") : "none"}</div>
-                <h3>Evidence</h3>
-                {answer.evidence.map((item) => <p key={item.id}><strong>{item.title}</strong>: {item.excerpt}</p>)}
-                <h3>Uncertainty</h3>
-                <p>{answer.uncertainty}</p>
-              </article>
-            )}
+
+            <form className="reviewForm" onSubmit={runReview}>
+              <textarea
+                value={reviewQuestion}
+                onChange={(event) => setReviewQuestion(event.target.value)}
+                placeholder="Ask one question over the selected sources..."
+                required
+              />
+              <div className="runRow">
+                <div className="profileSummary">
+                  {enabledProfiles.length
+                    ? enabledProfiles.map((profile) => <span key={profile.id}>{profile.name}</span>)
+                    : <span>No enabled profiles</span>}
+                </div>
+                <button type="submit" disabled={reviewBusy || !reviewQuestion.trim() || !enabledProfileCount}>
+                  {reviewBusy ? "Running review..." : "Run review"}
+                </button>
+              </div>
+            </form>
           </section>
-        )}
 
-        {tab === "bench" && (
-          <section className="benchGrid">
-            <article className="card featured">
-              <h2><BrainCircuit size={18}/> AI Bench</h2>
-              <p>Ask multiple 0G AI profiles the same question over the same Basar evidence package, then compare answer cards side by side.</p>
-            </article>
-
-            <article className="card benchProof">
-              <h2><ShieldCheck size={18}/> 0G Proof Panel</h2>
-              <div className="proofGrid compact">
-                <div className={enabledProfileCount ? "proofItem ready" : "proofItem"}>
-                  <span>Enabled profiles</span>
-                  <strong>{enabledProfileCount}</strong>
-                </div>
-                <div className={benchSuccessCount ? "proofItem ready" : "proofItem"}>
-                  <span>Successful providers</span>
-                  <strong>{benchSuccessCount}</strong>
-                </div>
-                <div className={benchFailedCount ? "proofItem errorState" : "proofItem"}>
-                  <span>Failed providers</span>
-                  <strong>{benchFailedCount}</strong>
-                </div>
-                <div className="proofItem wide">
-                  <span>Last run</span>
-                  <strong>{benchLastRunAt || "not run yet"}</strong>
-                </div>
+          <section className="flowSection" aria-labelledby="review-cards">
+            <div className="sectionHeader">
+              <div>
+                <p className="eyebrow">Reviews</p>
+                <h2 id="review-cards">Answer cards</h2>
               </div>
-              <p className="proofPrivacy">Each selected AI profile independently used the same Basar evidence package.</p>
-            </article>
+              <span className="smallStatus">{reviewResults.length} cards</span>
+            </div>
 
-            <form className="card profileForm" onSubmit={addProfile}>
-              <h2>AI Profiles</h2>
-              <div className="line profileLine">
-                <input placeholder="Profile name" value={profileDraft.name} onChange={(e) => setProfileDraft({...profileDraft, name: e.target.value})} />
-                <input placeholder="Router endpoint" value={profileDraft.routerEndpoint} onChange={(e) => setProfileDraft({...profileDraft, routerEndpoint: e.target.value})} required />
-                <input placeholder="Model" value={profileDraft.model} onChange={(e) => setProfileDraft({...profileDraft, model: e.target.value})} required />
-                <input type="password" placeholder="API key" value={profileDraft.apiKey} onChange={(e) => setProfileDraft({...profileDraft, apiKey: e.target.value})} required />
-                <button type="submit">Add profile</button>
-              </div>
-              <p className="meta">Profiles are stored only in this browser. Do not paste shared or maintainer-owned keys.</p>
-            </form>
-
-            <section className="profileList">
-              {aiProfiles.map((profile) => (
-                <article className="card profileCard" key={profile.id}>
-                  <label className="check">
-                    <input type="checkbox" checked={profile.enabled} onChange={(e) => updateProfile(profile.id, {enabled: e.target.checked})} />
-                    Enabled
-                  </label>
-                  <label>
-                    Name
-                    <input value={profile.name} onChange={(e) => updateProfile(profile.id, {name: e.target.value})} />
-                  </label>
-                  <label>
-                    Router endpoint
-                    <input value={profile.routerEndpoint} onChange={(e) => updateProfile(profile.id, {routerEndpoint: e.target.value})} />
-                  </label>
-                  <label>
-                    Model
-                    <input value={profile.model} onChange={(e) => updateProfile(profile.id, {model: e.target.value})} />
-                  </label>
-                  <label>
-                    API key
-                    <input type="password" value={profile.apiKey} onChange={(e) => updateProfile(profile.id, {apiKey: e.target.value})} />
-                  </label>
-                  <button type="button" className="danger" onClick={() => removeProfile(profile.id)}>Remove profile</button>
-                </article>
-              ))}
-              {!aiProfiles.length && <p className="empty">Add at least two 0G Router profiles to run a parallel review.</p>}
-            </section>
-
-            <form className="ask benchAsk" onSubmit={runBench}>
-              <textarea value={benchQuestion} onChange={(e) => setBenchQuestion(e.target.value)} placeholder="Ask one question across all enabled 0G AI profiles" required />
-              <button type="submit" disabled={benchBusy || !benchQuestion.trim() || !enabledProfileCount}>
-                {benchBusy ? "Running review..." : "Run Parallel Review"}
-              </button>
-            </form>
-
-            <section className="answerGrid">
-              {benchResults.map((result) => (
-                <article className={`card answer ${result.status === "rejected" ? "failed" : ""}`} key={`${result.profile_id}_${result.created_at}`}>
-                  <h2>{result.profile_name}</h2>
-                  <div className="meta">Provider: {result.provider} · Model: {result.model} · Status: {result.status}</div>
-                  {result.answer && <p>{result.answer}</p>}
-                  {result.citations?.length > 0 && <p className="meta">Citations: {result.citations.join(", ")}</p>}
-                  {result.uncertainty && <p>{result.uncertainty}</p>}
+            <div className="answerGrid">
+              {reviewResults.map((result) => (
+                <article className={`answerCard ${result.status === "rejected" ? "failed" : ""}`} key={`${result.profile_id}_${result.created_at}`}>
+                  <div className="answerHeader">
+                    <div>
+                      <h3>{result.profile_name}</h3>
+                      <p>{result.provider} / {result.model}</p>
+                    </div>
+                    <span className={`statusPill ${result.status}`}>{result.status}</span>
+                  </div>
+                  {result.answer && <p className="answerText">{result.answer}</p>}
+                  {result.citations?.length > 0 && (
+                    <p className="metaLine">Citations: {result.citations.join(", ")}</p>
+                  )}
+                  {result.evidence?.length > 0 && (
+                    <p className="metaLine">Evidence: {result.evidence.map((item) => item.id).join(", ")}</p>
+                  )}
+                  {result.uncertainty && <p className="quietLine">{result.uncertainty}</p>}
                   {result.error && <p className="errorText">{result.error}</p>}
                 </article>
               ))}
-            </section>
+            </div>
+            {!reviewResults.length && (
+              <p className="emptyText">Run a review to compare one answer card per enabled 0G AI profile.</p>
+            )}
           </section>
-        )}
 
-        {tab === "claims" && (
-          <section className="grid">
-            {claims.map((claim) => (
-              <article className="card" key={claim.id}>
-                <h2>{claim.claim}</h2>
-                <p className="meta">{claim.status} · confidence {claim.confidence} · {claim.source_id}</p>
-              </article>
-            ))}
-            {!claims.length && <p className="empty">No claim cards yet. Claims are extracted locally from saved source text.</p>}
-          </section>
-        )}
-
-        {tab === "settings" && (
-          <section className="settingsGrid">
-            <article className="card featured">
-              <h2><span className="ogGlyph">0G</span> 0G Onboarding</h2>
-              <ol>
-                <li>Create or fund Router credit in the 0G Router console.</li>
-                <li>Create a Router API key and choose a model.</li>
-                <li>Paste the endpoint, model, and API key below.</li>
-                <li>Add sources, ask questions, then publish a growth package to 0G Storage.</li>
-              </ol>
-              <div className="quickLinks">
-                <a href="https://pc.0g.ai/" target="_blank" rel="noreferrer">Open 0G Router</a>
-                <a href="https://docs.0g.ai/developer-hub/building-on-0g/compute-network/router/faq" target="_blank" rel="noreferrer">Router FAQ</a>
-                <a href="https://docs.0g.ai/developer-hub/building-on-0g/storage" target="_blank" rel="noreferrer">Storage docs</a>
+          <section className="proofPanel" aria-label="0G Proof Panel">
+            <div className="proofHeader">
+              <ShieldCheck size={18}/>
+              <div>
+                <p className="eyebrow">Proof</p>
+                <h2>0G Proof Panel</h2>
               </div>
-            </article>
+            </div>
+            <div className="proofGrid">
+              <div>
+                <span>Enabled profiles</span>
+                <strong>{enabledProfileCount}</strong>
+              </div>
+              <div>
+                <span>Successful providers</span>
+                <strong>{successfulProviderCount}</strong>
+              </div>
+              <div>
+                <span>Failed providers</span>
+                <strong>{failedProviderCount}</strong>
+              </div>
+              <div>
+                <span>Last run</span>
+                <strong>{reviewLastRunAt || "Not run yet"}</strong>
+              </div>
+            </div>
+            <p>Each selected AI profile independently used the same Basar evidence package.</p>
+          </section>
 
-            <article className="card">
-              <h2><BrainCircuit size={18}/> BYO 0G Router</h2>
+          <section className="flowSection exportSection" aria-labelledby="review-export">
+            <div>
+              <p className="eyebrow">Export</p>
+              <h2 id="review-export">Growth package</h2>
+              <p>Exports sources, claims, answer cards, and parallel_reviews as basar.growth-package.v1.</p>
+            </div>
+            <button type="button" onClick={exportLibrary}>
+              <Download size={16}/>
+              Download growth package
+            </button>
+          </section>
+        </section>
+      )}
+
+      {view === "library" && (
+        <section className="viewStack" aria-label="Library">
+          <section className="flowSection">
+            <div className="sectionHeader">
+              <div>
+                <p className="eyebrow">Library</p>
+                <h2>Sources</h2>
+              </div>
+              <span className="smallStatus">{sources.length} saved</span>
+            </div>
+            <div className="sourceGrid">
+              {sources.map((source) => (
+                <article className="sourceCard" key={source.id}>
+                  <div className="cardKicker">{source.id}</div>
+                  <h3>{source.title}</h3>
+                  <p>{source.summary}</p>
+                  <span>{source.url} / score {source.quality?.score ?? 0}</span>
+                </article>
+              ))}
+            </div>
+            {!sources.length && <p className="emptyText">No sources saved yet.</p>}
+          </section>
+
+          <section className="flowSection">
+            <div className="sectionHeader">
+              <div>
+                <p className="eyebrow">Evidence</p>
+                <h2>Claims</h2>
+              </div>
+              <span className="smallStatus">{claims.length} cards</span>
+            </div>
+            <div className="claimGrid">
+              {claims.map((claim) => (
+                <article className="claimCard" key={claim.id}>
+                  <h3>{claim.claim}</h3>
+                  <p>{claim.status} / confidence {claim.confidence} / {claim.source_id}</p>
+                </article>
+              ))}
+            </div>
+            {!claims.length && <p className="emptyText">No claim cards yet. Claims are extracted locally from saved source text.</p>}
+          </section>
+
+          <section className="flowSection exportSection">
+            <div>
+              <p className="eyebrow">Saved evidence</p>
+              <h2>Preservation record</h2>
+              <p>{sources.length} sources, {claims.length} claims, {packageReviewCount} parallel review records.</p>
+              {publishedRef && <p className="quietLine">Last published reference: {publishedRef}</p>}
+            </div>
+            <button type="button" onClick={exportLibrary}>
+              <Download size={16}/>
+              Download growth package
+            </button>
+          </section>
+        </section>
+      )}
+
+      {view === "profiles" && (
+        <section className="viewStack" aria-label="Profiles">
+          <section className="flowSection">
+            <div className="sectionHeader">
+              <div>
+                <p className="eyebrow">Profiles</p>
+                <h2>AI reviewers</h2>
+              </div>
+              <span className="smallStatus">{enabledProfileCount} enabled</span>
+            </div>
+            <p className="helperText">Profiles are stored browser-locally. Users provide their own 0G Router credentials.</p>
+
+            <form className="profileForm" onSubmit={addProfile}>
+              <input placeholder="Profile name" value={profileDraft.name} onChange={(event) => setProfileDraft({...profileDraft, name: event.target.value})} />
+              <input placeholder="Router endpoint" value={profileDraft.routerEndpoint} onChange={(event) => setProfileDraft({...profileDraft, routerEndpoint: event.target.value})} required />
+              <input placeholder="Model" value={profileDraft.model} onChange={(event) => setProfileDraft({...profileDraft, model: event.target.value})} required />
+              <input type="password" placeholder="API key" value={profileDraft.apiKey} onChange={(event) => setProfileDraft({...profileDraft, apiKey: event.target.value})} required autoComplete="off" />
+              <button type="submit">Add profile</button>
+            </form>
+
+            <div className="profileGrid">
+              {aiProfiles.map((profile) => (
+                <article className="profileCard" key={profile.id}>
+                  <div className="profileCardHeader">
+                    <label className="check">
+                      <input type="checkbox" checked={profile.enabled} onChange={(event) => updateProfile(profile.id, {enabled: event.target.checked})} />
+                      Enabled
+                    </label>
+                    <button type="button" className="textButton dangerText" onClick={() => removeProfile(profile.id)}>Remove</button>
+                  </div>
+                  <label>
+                    Name
+                    <input value={profile.name} onChange={(event) => updateProfile(profile.id, {name: event.target.value})} />
+                  </label>
+                  <label>
+                    Endpoint
+                    <input value={profile.routerEndpoint} onChange={(event) => updateProfile(profile.id, {routerEndpoint: event.target.value})} />
+                  </label>
+                  <label>
+                    Model
+                    <input value={profile.model} onChange={(event) => updateProfile(profile.id, {model: event.target.value})} />
+                  </label>
+                  <label>
+                    API key
+                    <input type="password" value={profile.apiKey} onChange={(event) => updateProfile(profile.id, {apiKey: event.target.value})} autoComplete="off" />
+                  </label>
+                </article>
+              ))}
+            </div>
+            {!aiProfiles.length && <p className="emptyText">Add at least two 0G Router profiles to run a parallel review.</p>}
+          </section>
+
+          <section className="flowSection settingsSection">
+            <div>
+              <p className="eyebrow">Profiles</p>
+              <h2>Default Router settings</h2>
+            </div>
+            <div className="settingsGrid">
               <label>
                 Router endpoint
-                <input value={settings.routerEndpoint} onChange={(e) => persistSettings({...settings, routerEndpoint: e.target.value})} />
+                <input value={settings.routerEndpoint} onChange={(event) => persistSettings({...settings, routerEndpoint: event.target.value})} />
               </label>
               <label>
                 Model
-                <input placeholder="Enter a model from your 0G Router account" value={settings.model} onChange={(e) => persistSettings({...settings, model: e.target.value})} />
+                <input placeholder="Enter a model from your 0G Router account" value={settings.model} onChange={(event) => persistSettings({...settings, model: event.target.value})} />
               </label>
               <label>
                 API key
-                <input type="password" placeholder="Stored only in this browser if enabled" value={settings.apiKey} onChange={(e) => persistSettings({...settings, apiKey: e.target.value})} />
+                <input type="password" placeholder="Stored only in this browser if enabled" value={settings.apiKey} onChange={(event) => persistSettings({...settings, apiKey: event.target.value})} autoComplete="off" />
               </label>
               <label className="check">
-                <input type="checkbox" checked={settings.persistApiKey} onChange={(e) => persistSettings({...settings, persistApiKey: e.target.checked})} />
+                <input type="checkbox" checked={settings.persistApiKey} onChange={(event) => persistSettings({...settings, persistApiKey: event.target.checked})} />
                 Keep API key in this browser
               </label>
-            </article>
-
-            <article className="card">
-              <h2><UploadCloud size={18}/> 0G Growth Storage</h2>
-              <p className="meta">Publish user-added sources as a portable JSON package to the user's own 0G Storage compatible endpoint.</p>
-              <form className="publishForm" onSubmit={publishTo0g}>
-                <label>
-                  Storage endpoint
-                  <input placeholder="https://your-0g-storage-gateway.example/upload" value={settings.storageEndpoint} onChange={(e) => persistSettings({...settings, storageEndpoint: e.target.value})} />
-                </label>
-                <label>
-                  Storage API key
-                  <input type="password" placeholder="Optional; stored only if enabled" value={settings.storageApiKey} onChange={(e) => persistSettings({...settings, storageApiKey: e.target.value})} />
-                </label>
-                <label className="check">
-                  <input type="checkbox" checked={settings.persistStorageKey} onChange={(e) => persistSettings({...settings, persistStorageKey: e.target.checked})} />
-                  Keep storage key in this browser
-                </label>
-                <div className="buttonRow">
-                  <button type="button" onClick={exportLibrary}><Download size={16}/>Download growth package</button>
-                  <button type="submit" disabled={publishing || !sources.length}>{publishing ? "Publishing..." : "Publish to 0G"}</button>
-                </div>
-              </form>
-              {publishedRef && <div className="notice success">Published reference: {publishedRef}</div>}
-            </article>
-
-            <article className="card">
-              <h2><ShieldCheck size={18}/> Privacy Boundary</h2>
-              <p>This public build has no project backend. Sources stay in the user's browser unless they export data or configure their own 0G services.</p>
-              <p>No traffic is sent to the developer machine. 0G Router calls use the endpoint and key entered by the current user.</p>
-              <button className="danger" onClick={resetLibrary}><Trash2 size={16}/>Clear browser library</button>
-            </article>
+            </div>
           </section>
-        )}
-      </section>
+
+          <section className="flowSection settingsSection">
+            <div className="sectionHeader">
+              <div>
+                <p className="eyebrow">Export</p>
+                <h2>0G growth storage</h2>
+              </div>
+              <span className={storageConfigured ? "smallStatus ready" : "smallStatus"}>{storageConfigured ? "Configured" : "Not configured"}</span>
+            </div>
+            <form className="publishForm" onSubmit={publishTo0g}>
+              <label>
+                Storage endpoint
+                <input placeholder="https://your-0g-storage-gateway.example/upload" value={settings.storageEndpoint} onChange={(event) => persistSettings({...settings, storageEndpoint: event.target.value})} />
+              </label>
+              <label>
+                Storage API key
+                <input type="password" placeholder="Optional; stored only if enabled" value={settings.storageApiKey} onChange={(event) => persistSettings({...settings, storageApiKey: event.target.value})} autoComplete="off" />
+              </label>
+              <label className="check">
+                <input type="checkbox" checked={settings.persistStorageKey} onChange={(event) => persistSettings({...settings, persistStorageKey: event.target.checked})} />
+                Keep storage key in this browser
+              </label>
+              <div className="buttonRow">
+                <button type="button" className="secondary" onClick={exportLibrary}>
+                  <Download size={16}/>
+                  Download growth package
+                </button>
+                <button type="submit" disabled={publishing || !sources.length}>
+                  <UploadCloud size={16}/>
+                  {publishing ? "Publishing..." : "Publish to 0G"}
+                </button>
+              </div>
+            </form>
+            {publishedRef && <div className="notice success">Published reference: {publishedRef}</div>}
+          </section>
+
+          <section className="flowSection privacySection">
+            <div>
+              <p className="eyebrow">Boundary</p>
+              <h2>Browser-local storage</h2>
+              <p>Sources stay in this browser unless the user exports data or configures their own 0G services.</p>
+            </div>
+            <button type="button" className="dangerButton" onClick={resetLibrary}>
+              <Trash2 size={16}/>
+              Clear browser library
+            </button>
+          </section>
+        </section>
+      )}
     </main>
   );
 }
