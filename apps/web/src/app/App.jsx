@@ -228,7 +228,7 @@ function App() {
     <main>
       <aside>
         <div className="brand">
-          <img src={`${import.meta.env.BASE_URL}basar-mark.png`} alt="Basar mark"/>
+          <img src={`${import.meta.env.BASE_URL}basar-logo.png`} alt="Basar mark"/>
           <span>Basar</span>
         </div>
         <div className="ogBadge"><span>0G</span> ecosystem tool</div>
@@ -299,7 +299,7 @@ function App() {
         {tab === "sources" && (
           <section>
             <div className="onboarding">
-              <img src={`${import.meta.env.BASE_URL}basar-mark.png`} alt="Basar"/>
+              <img src={`${import.meta.env.BASE_URL}basar-logo.png`} alt="Basar"/>
               <div>
                 <h2>Grow the 0G knowledge layer</h2>
                 <p>Add lawful source text, ask with your own 0G Router key, then publish a growth package to your own 0G Storage endpoint so this library can move beyond one browser.</p>
