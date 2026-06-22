@@ -48,7 +48,7 @@ function App() {
   const [reviewQuestion, setReviewQuestion] = useState("");
   const [profileDraft, setProfileDraft] = useState({
     name: "",
-    routerEndpoint: "https://router-api.0g.ai/v1",
+    routerEndpoint: "http://127.0.0.1:8787/v1",
     model: "",
     apiKey: "",
     enabled: true,
@@ -133,7 +133,7 @@ function App() {
       persistAiProfiles([...aiProfiles, profile]);
       setProfileDraft({
         name: "",
-        routerEndpoint: "https://router-api.0g.ai/v1",
+        routerEndpoint: "http://127.0.0.1:8787/v1",
         model: "",
         apiKey: "",
         enabled: true,
@@ -335,7 +335,8 @@ function App() {
                     <p className="metaLine">Evidence: {result.evidence.map((item) => item.id).join(", ")}</p>
                   )}
                   {result.uncertainty && <p className="quietLine">{result.uncertainty}</p>}
-                  {result.error && <p className="errorText">{result.error}</p>}
+                  {result.error_hint && <p className="quietLine">{result.error_hint}</p>}
+                  {result.error && <p className="errorText">Raw error: {result.error}</p>}
                 </article>
               ))}
             </div>
@@ -454,13 +455,13 @@ function App() {
               </div>
               <span className="smallStatus">{enabledProfileCount} enabled</span>
             </div>
-            <p className="helperText">Profiles are stored browser-locally. Users provide their own 0G Router credentials.</p>
+            <p className="helperText">Profiles are stored browser-locally. For official 0G Router recording, use a local user-owned relay such as http://127.0.0.1:8787/v1 so the Router key stays outside the browser.</p>
 
             <form className="profileForm" onSubmit={addProfile}>
               <input placeholder="Profile name" value={profileDraft.name} onChange={(event) => setProfileDraft({...profileDraft, name: event.target.value})} />
-              <input placeholder="Router endpoint" value={profileDraft.routerEndpoint} onChange={(event) => setProfileDraft({...profileDraft, routerEndpoint: event.target.value})} required />
+              <input placeholder="Router / CORS-compatible endpoint" value={profileDraft.routerEndpoint} onChange={(event) => setProfileDraft({...profileDraft, routerEndpoint: event.target.value})} required />
               <input placeholder="Model" value={profileDraft.model} onChange={(event) => setProfileDraft({...profileDraft, model: event.target.value})} required />
-              <input type="password" placeholder="API key" value={profileDraft.apiKey} onChange={(event) => setProfileDraft({...profileDraft, apiKey: event.target.value})} required autoComplete="off" />
+              <input type="password" placeholder="API key or local relay placeholder" value={profileDraft.apiKey} onChange={(event) => setProfileDraft({...profileDraft, apiKey: event.target.value})} required autoComplete="off" />
               <button type="submit">Add profile</button>
             </form>
 
@@ -479,7 +480,7 @@ function App() {
                     <input value={profile.name} onChange={(event) => updateProfile(profile.id, {name: event.target.value})} />
                   </label>
                   <label>
-                    Endpoint
+                    Router / CORS-compatible endpoint
                     <input value={profile.routerEndpoint} onChange={(event) => updateProfile(profile.id, {routerEndpoint: event.target.value})} />
                   </label>
                   <label>
@@ -487,7 +488,7 @@ function App() {
                     <input value={profile.model} onChange={(event) => updateProfile(profile.id, {model: event.target.value})} />
                   </label>
                   <label>
-                    API key
+                    API key or local relay placeholder
                     <input type="password" value={profile.apiKey} onChange={(event) => updateProfile(profile.id, {apiKey: event.target.value})} autoComplete="off" />
                   </label>
                 </article>
@@ -499,11 +500,11 @@ function App() {
           <section className="flowSection settingsSection">
             <div>
               <p className="eyebrow">Profiles</p>
-              <h2>Default Router settings</h2>
+              <h2>Default Router / relay settings</h2>
             </div>
             <div className="settingsGrid">
               <label>
-                Router endpoint
+                Router / CORS-compatible endpoint
                 <input value={settings.routerEndpoint} onChange={(event) => persistSettings({...settings, routerEndpoint: event.target.value})} />
               </label>
               <label>
@@ -511,12 +512,12 @@ function App() {
                 <input placeholder="Enter a model from your 0G Router account" value={settings.model} onChange={(event) => persistSettings({...settings, model: event.target.value})} />
               </label>
               <label>
-                API key
-                <input type="password" placeholder="Stored only in this browser if enabled" value={settings.apiKey} onChange={(event) => persistSettings({...settings, apiKey: event.target.value})} autoComplete="off" />
+                API key or local relay placeholder
+                <input type="password" placeholder="Use local-demo-key when the relay injects the real key" value={settings.apiKey} onChange={(event) => persistSettings({...settings, apiKey: event.target.value})} autoComplete="off" />
               </label>
               <label className="check">
                 <input type="checkbox" checked={settings.persistApiKey} onChange={(event) => persistSettings({...settings, persistApiKey: event.target.checked})} />
-                Keep API key in this browser
+                Keep this value in this browser
               </label>
             </div>
           </section>

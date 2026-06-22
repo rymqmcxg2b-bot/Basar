@@ -2,7 +2,7 @@
 
 ## 1) 清理本機連結
 
-- README 與 web README 說明公開版為 static BYO 0G，不要求專案維護者提供共享 API。
+- README 與 web README 說明公開版為 browser-local workspace；正式 0G Router 錄影使用 user-owned local relay，不把 Router API key 放進 browser。
 - 確認不會出現 `.env` 或個人電腦路徑（例如 `/Users/...`、`file://...`）在對外文件與 release note 中。
 - 確認不把本地資料庫或本機快取上傳到分享資源中（`*.sqlite`, `data/archive/` 需排除）。
 
@@ -20,7 +20,7 @@ git push origin zero-cup-group-stage-20260618
 
   - 主要功能
   - 本地-first 保證
-  - 0G Router AI Bench、parallel review 與 growth package 方向
+  - 0G Router AI Bench、local relay、parallel review 與 growth package 方向
   - 資料治理聲明
 
 - 可選：先生成本地上架套件（不含 `.git`、`.env*`、`data`、`node_modules`、`docs/basar-handoff`）：
@@ -45,7 +45,7 @@ git push origin zero-cup-group-stage-20260618
 
 ## 3) 公開展示資源
 
-- 若要掛網站 demo：使用 GitHub Pages 或其他靜態託管，並說明使用者自帶 0G Router、模型、憑證與 storage workflow。
+- 若要掛網站 demo：使用 GitHub Pages 或其他靜態託管，並說明 static browser 版支援 local-first workspace、export、CORS-compatible endpoint；正式 Router 推理使用 user-controlled relay/backend，未來 browser-native 路線是 0G Direct wallet signing。
 - 發布社群貼文時，附帶：
   - 專案定位（1 行）
   - 本地化與可移植資料治理重點

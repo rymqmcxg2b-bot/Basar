@@ -6,6 +6,9 @@ Basar is a multi-AI evidence workspace powered by 0G. Instead of copying the
 same context into different AI tools, users add their sources once and send the
 same evidence package to multiple 0G Router models.
 
+For this recording, Basar uses a local user-owned relay, so the 0G Router key
+stays outside the browser.
+
 10-25s
 
 Load the demo source. Show that source cards and claim cards are created in the
@@ -16,11 +19,12 @@ AI models.
 
 25-45s
 
-Open AI Bench. Show multiple user-owned 0G AI profiles: endpoint, model, masked
-API key, and enabled state.
+Open AI Bench. Show multiple 0G AI profiles: local relay endpoint, model,
+placeholder key, and enabled state.
 
-Each profile can review the same evidence package independently, while the user
-keeps control of credentials and model selection.
+Each profile can review the same evidence package independently. The browser
+stores only the profile configuration; the real Router key stays in the local
+relay terminal.
 
 45-65s
 
@@ -44,7 +48,7 @@ citations, and review metadata.
 80-90s
 
 Close with the honest boundary: local mode is the offline fallback; the Zero Cup
-demo path uses 0G Router as the active inference layer and preserves portable
+demo path uses 0G Router through a user-owned local relay and preserves portable
 review records.
 
 Basar is not another AI assistant. It is the evidence layer for many 0G AIs:

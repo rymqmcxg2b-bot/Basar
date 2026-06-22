@@ -8,6 +8,8 @@
     "dev": "vite --host 0.0.0.0",
     "build": "vite build",
     "preview": "vite preview --host 0.0.0.0",
+    "preview:recording": "vite preview --host 127.0.0.1 --port 4173",
+    "relay:0g": "node scripts/og-router-relay.mjs",
     "smoke:zero-cup": "node scripts/smoke-zero-cup.mjs"
   },
   "dependencies": {

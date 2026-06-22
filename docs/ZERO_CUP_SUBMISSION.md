@@ -4,7 +4,8 @@
 
 Basar lets users ask multiple 0G AI models the same question over the same
 sources, compare their answer cards, preserve citations, and export or publish a
-portable growth package.
+portable growth package. For live 0G Router inference in the recording, Basar
+uses a user-controlled local relay so Router API keys stay outside the browser.
 
 ## Problem
 
@@ -17,13 +18,14 @@ review record into a user-owned archive.
 
 Basar is a browser-local evidence workspace. Users add lawful source text, open
 the Review workspace, run the parallel AI Bench review across selected 0G
-Router profiles, compare answer cards, and preserve the review as a
+Router-compatible profiles, compare answer cards, and preserve the review as a
 `basar.growth-package.v1` package.
 
 ## What 0G Does
 
-- 0G Router is the active inference layer for the Zero Cup demo path.
-- Each enabled AI profile uses a user-owned Router endpoint, model, and API key.
+- 0G Router is the active inference layer for the Zero Cup recording path.
+- Each enabled AI profile uses a CORS-compatible endpoint or user-controlled local relay plus a selected model.
+- The local relay reads `OG_ROUTER_API_KEY` from the user's terminal environment, not from browser storage.
 - Basar sends the same retrieved evidence package to each selected model.
 - Each model returns one answer card with provider, model, status, answer,
   citations, and uncertainty or error.
@@ -33,7 +35,7 @@ Router profiles, compare answer cards, and preserve the review as a
 ## Demo Flow
 
 1. Load or add lawful sources.
-2. Configure multiple 0G AI profiles.
+2. Configure multiple 0G AI profiles against `http://127.0.0.1:8787/v1`.
 3. Open the Review workspace.
 4. Run the parallel AI Bench review with one question.
 5. Basar retrieves the same evidence package for every selected profile.
@@ -41,8 +43,8 @@ Router profiles, compare answer cards, and preserve the review as a
 7. Inspect the 0G Proof Panel.
 8. Export or publish the portable growth package.
 
-Local mode is the offline fallback. The Zero Cup demo path uses 0G Router as the
-active inference layer.
+Local mode is the offline fallback. The Zero Cup recording path uses 0G Router
+through a local user-owned relay as the active inference layer.
 
 ## How To Run Locally
 
@@ -68,11 +70,12 @@ Manual Review / AI Bench test:
 
 1. Open the web app.
 2. Load the demo source or add a lawful source.
-3. Add two AI profiles with user-owned 0G Router credentials.
-4. Open the Review workspace and run one parallel AI Bench review.
-5. Confirm each answer card shows profile, provider, model, status, answer,
+3. Start the local relay with `OG_ROUTER_API_KEY` in a private terminal.
+4. Add AI profiles that point to `http://127.0.0.1:8787/v1`.
+5. Open the Review workspace and run one parallel AI Bench review.
+6. Confirm each answer card shows profile, provider, model, status, answer,
    citations, and uncertainty or error.
-6. Export the growth package and confirm it includes `parallel_reviews`.
+7. Export the growth package and confirm it includes `parallel_reviews`.
 
 ## Pre-existing Foundation and Zero Cup Work
 
@@ -85,7 +88,8 @@ Do not claim the whole repository started after June 15.
 ## Known Limitations
 
 - The public build is browser-local, not a hosted SaaS.
-- Users must provide their own 0G Router and storage credentials.
+- Official 0G Router API keys are server-side credentials; static browser use needs a CORS-compatible endpoint or a user-controlled relay.
+- Browser-native 0G Direct wallet-signed inference is a future path and is not implemented in this Group Stage version.
 - AI Bench does not create autonomous agents or orchestrate tasks.
 - Storage publishing accepts compatible gateway responses; production teams
   should verify current official 0G SDK/API behavior before relying on it.
@@ -95,5 +99,6 @@ Do not claim the whole repository started after June 15.
 ## No Secrets / User-Owned Keys
 
 Basar does not ship shared Router keys, wallet keys, API keys, private archives,
-or local databases. AI profiles and storage credentials are entered by the user
-and stored only in that user's browser if they choose to use the public web app.
+or local databases. For live Router recording, the key is provided only to the
+local relay through `OG_ROUTER_API_KEY`; the browser profile can use a harmless
+placeholder such as `local-demo-key`.

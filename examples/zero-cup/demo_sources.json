@@ -4,7 +4,7 @@
     "title": "Basar Zero Cup Demo Source",
     "url": "https://example.org/basar-zero-cup-demo",
     "license": "CC0-1.0",
-    "content": "Basar is a 0G-first evidence librarian. It helps users add lawful source text, ask questions through their own 0G Router credentials, inspect cited evidence, and export or publish portable growth packages to a user-controlled 0G-compatible storage endpoint."
+    "content": "Basar is a 0G-first evidence workspace. It helps users add lawful source text, ask questions through a CORS-compatible endpoint or user-owned 0G Router relay, inspect cited evidence, and export or publish portable growth packages to a user-controlled 0G-compatible storage endpoint."
   },
   {
     "id": "zero_cup_demo_source_2",
