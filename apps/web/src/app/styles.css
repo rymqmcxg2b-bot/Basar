@@ -581,6 +581,13 @@ label {
   background: #fffdf8;
 }
 
+.demoNotice {
+  margin: 0;
+  border-color: #d6c68d;
+  color: #5f5427;
+  background: #fff9dd;
+}
+
 .error {
   border-color: #d4b2ad;
   color: #7c3f38;
@@ -593,6 +600,75 @@ label {
   color: #31483c;
   background: #f5f8f4;
   overflow-wrap: anywhere;
+}
+
+.recordingCues {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 1000;
+  display: grid;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.recordingBadge,
+.recordingLabel {
+  width: fit-content;
+  max-width: min(320px, calc(100vw - 32px));
+  justify-self: end;
+  border: 1px solid rgba(37, 48, 41, 0.2);
+  border-radius: 999px;
+  padding: 8px 11px;
+  color: #172019;
+  background: rgba(255, 253, 248, 0.94);
+  box-shadow: 0 12px 30px rgba(32, 35, 32, 0.14);
+  font-size: 13px;
+}
+
+.recordingBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+}
+
+.recordingDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: #c74336;
+  box-shadow: 0 0 0 5px rgba(199, 67, 54, 0.16);
+}
+
+.recordingLabel {
+  border-radius: 6px;
+  color: #4d554e;
+  overflow-wrap: anywhere;
+}
+
+.recordingRipple {
+  position: fixed;
+  z-index: 999;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+  border: 2px solid rgba(63, 87, 75, 0.9);
+  border-radius: 999px;
+  pointer-events: none;
+  animation: recordingRipple 650ms ease-out forwards;
+}
+
+@keyframes recordingRipple {
+  from {
+    opacity: 0.75;
+    transform: scale(0.7);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(3.6);
+  }
 }
 
 @media (max-width: 860px) {

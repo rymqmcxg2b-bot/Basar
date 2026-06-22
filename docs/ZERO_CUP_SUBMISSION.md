@@ -69,7 +69,7 @@ npm run dev
 Manual Review / AI Bench test:
 
 1. Open the web app.
-2. Load the demo source or add a lawful source.
+2. Load the investment demo or add lawful source text.
 3. Start the local relay with `OG_ROUTER_API_KEY` in a private terminal.
 4. Add AI profiles that point to `http://127.0.0.1:8787/v1`.
 5. Open the Review workspace and run one parallel AI Bench review.
@@ -93,7 +93,7 @@ Do not claim the whole repository started after June 15.
 - AI Bench does not create autonomous agents or orchestrate tasks.
 - Storage publishing accepts compatible gateway responses; production teams
   should verify current official 0G SDK/API behavior before relying on it.
-- Local fallback can search saved sources without Router credentials, but it is
+- Local fallback can search saved sources without a Router endpoint or relay, but it is
   not the primary Zero Cup judging path.
 
 ## No Secrets / User-Owned Keys

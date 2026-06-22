@@ -11,8 +11,8 @@ stays outside the browser.
 
 10-25s
 
-Load the demo source. Show that source cards and claim cards are created in the
-browser library without a shared backend or a founder-owned database.
+Load the investment demo. Show five fictional AsterGrid source cards and the
+visible note: fictional demo data / not investment advice.
 
 Basar turns user-provided material into reusable evidence context for multiple
 AI models.
@@ -28,7 +28,11 @@ relay terminal.
 
 45-65s
 
-Ask: “How does Basar use 0G?”
+Ask:
+
+“I am preparing a first-pass investment memo. Based only on these sources, what
+should I believe, what should I doubt, and what should I verify next? Do not
+give a buy or sell recommendation.”
 
 Show one answer card per enabled profile. Each card shows provider, model,
 status, answer, citations, and uncertainty or error metadata.

@@ -5,7 +5,9 @@ import {
   askManyRouters,
   askWithRouter,
   buildGrowthPackage,
+  createInvestmentDemoSources,
   extractStoragePointer,
+  INVESTMENT_MEMO_PROMPT,
   publishGrowthPackage,
 } from "../src/lib/localLibrary.js";
 
@@ -25,6 +27,13 @@ const evidence = [
     content: "Basar uses 0G Router inference and exports portable growth packages.",
   },
 ];
+
+const investmentSources = createInvestmentDemoSources();
+assert.equal(investmentSources.length, 5);
+assert.equal(new Set(investmentSources.map((source) => source.title)).size, 5);
+assert.ok(investmentSources.every((source) => source.title.startsWith("AsterGrid ")));
+assert.ok(investmentSources.every((source) => source.content.includes("Fictional demo data / not investment advice")));
+assert.match(INVESTMENT_MEMO_PROMPT, /Do not give a buy or sell recommendation/);
 
 globalThis.fetch = async (url, options) => {
   const body = JSON.parse(options.body);

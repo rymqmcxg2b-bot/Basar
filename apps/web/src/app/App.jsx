@@ -15,8 +15,10 @@ import {
   clearLibrary,
   createAiProfile,
   createDemoSource,
+  createInvestmentDemoSources,
   createSource,
   extractClaims,
+  INVESTMENT_MEMO_PROMPT,
   loadAiProfiles,
   loadClaims,
   loadSettings,
@@ -28,6 +30,7 @@ import {
   saveSources,
   searchSources,
 } from "../lib/localLibrary";
+import RecordingCues from "./RecordingCues";
 import "./styles.css";
 
 const views = [
@@ -92,6 +95,7 @@ function App() {
   const failedProviderCount = reviewResults.filter((result) => result.status === "rejected").length;
   const storageConfigured = Boolean(settings.storageEndpoint);
   const packageReviewCount = growthPackage.parallel_reviews?.length || 0;
+  const investmentDemoLoaded = sources.some((source) => source.title.startsWith("AsterGrid "));
 
   function persistSources(nextSources) {
     setSources(nextSources);
@@ -203,6 +207,16 @@ function App() {
     setReviewQuestion("How does Basar use 0G?");
   }
 
+  function loadInvestmentDemo() {
+    const existingTitles = new Set(sources.map((source) => source.title));
+    const nextSources = createInvestmentDemoSources().filter((source) => !existingTitles.has(source.title));
+    if (nextSources.length) {
+      persistSources([...nextSources, ...sources]);
+    }
+    setView("review");
+    setReviewQuestion(INVESTMENT_MEMO_PROMPT);
+  }
+
   function shortEvidenceText(source) {
     return source.excerpt || source.summary || source.content?.slice(0, 240) || "";
   }
@@ -219,6 +233,7 @@ function App() {
           <p>Same sources. Multiple 0G AI reviews. Portable evidence memory.</p>
         </div>
         <div className="topActions">
+          <button type="button" className="secondary" onClick={loadInvestmentDemo}>Load investment demo</button>
           <button type="button" className="secondary" onClick={loadDemoSource}>Load demo source</button>
           <button type="button" onClick={exportLibrary}>
             <Download size={16}/>
@@ -246,8 +261,14 @@ function App() {
                 <p className="eyebrow">Evidence</p>
                 <h2 id="review-sources">Sources</h2>
               </div>
-              <button type="button" className="secondary" onClick={loadDemoSource}>Load demo source</button>
+              <div className="buttonRow">
+                <button type="button" className="secondary" onClick={loadInvestmentDemo}>Load investment demo</button>
+                <button type="button" className="secondary" onClick={loadDemoSource}>Load demo source</button>
+              </div>
             </div>
+            {investmentDemoLoaded && (
+              <div className="notice demoNotice">Fictional demo data / not investment advice.</div>
+            )}
 
             <form className="sourceForm" onSubmit={submitSource}>
               <div className="sourceLine">
@@ -570,6 +591,7 @@ function App() {
           </section>
         </section>
       )}
+      <RecordingCues/>
     </main>
   );
 }

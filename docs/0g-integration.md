@@ -31,6 +31,13 @@ real model responses as answer cards.
 
 This is the recommended Zero Cup recording path.
 
+The browser profile API key field can use a harmless placeholder such as
+`local-demo-key` when the relay injects the real key upstream.
+
+Static browser direct calls to the official Router endpoint may fail due to
+CORS and browser credential boundaries. That failure is not necessarily an API
+key problem.
+
 ### 3. Direct Browser Path
 
 The future browser-native path is 0G Direct with wallet-signed requests. That
@@ -65,8 +72,8 @@ The Direct wallet-signed path is not implemented in this Group Stage version.
 
 ## Storage Pointer Semantics
 
-0G-compatible storage publishing is user-controlled. A compatible storage
-response may return one of:
+0G-compatible storage publishing remains a user-controlled compatible endpoint
+/ pointer workflow. A compatible storage response may return one of:
 
 - `uri`
 - `rootHash`

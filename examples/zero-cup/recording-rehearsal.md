@@ -13,7 +13,7 @@ the browser and is read only by the local relay from `OG_ROUTER_API_KEY`.
 
 ```bash
 cd apps/web
-node --run preview -- --host 127.0.0.1 --port 4173
+node --run preview:recording
 ```
 
 Recording URL:
@@ -116,14 +116,20 @@ Enable all three profiles.
 ## Recording Flow
 
 1. Open `http://127.0.0.1:4173/?recording=1`.
-2. Load the demo source.
+2. Load the investment demo.
 3. Add the three profiles above.
 4. Open Review.
-5. Ask one question over the saved evidence.
+5. Run this investment memo prompt:
+
+```text
+I am preparing a first-pass investment memo. Based only on these sources, what should I believe, what should I doubt, and what should I verify next? Do not give a buy or sell recommendation.
+```
+
 6. Run review.
 7. Show answer cards.
 8. Show the 0G Proof Panel.
 9. Export the growth package.
+10. Point to `parallel_reviews` in the exported package.
 
 ## Narration Replacement
 

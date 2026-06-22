@@ -21,6 +21,42 @@ const DEMO_SOURCE_TEXT = [
   "Model answers should cite retrieved sources and state uncertainty when evidence is thin.",
 ].join(" ");
 
+export const INVESTMENT_MEMO_PROMPT =
+  "I am preparing a first-pass investment memo. Based only on these sources, what should I believe, what should I doubt, and what should I verify next? Do not give a buy or sell recommendation.";
+
+const ASTERGRID_DEMO_SOURCES = [
+  {
+    title: "AsterGrid Company Snapshot",
+    url: "https://example.org/astergrid/company-snapshot",
+    content:
+      "Fictional demo data / not investment advice. AsterGrid Labs is a fictional grid analytics software company used only for the Basar Zero Cup recording. The company sells monitoring tools for regional energy operators, claims improved outage triage workflows, and reports that customers use the product to organize maintenance signals. This source is a fictional first-pass company snapshot, not real market data.",
+  },
+  {
+    title: "AsterGrid Positive Signals",
+    url: "https://example.org/astergrid/positive-signals",
+    content:
+      "Fictional demo data / not investment advice. Positive signals for fictional AsterGrid include three pilot renewals, a reported reduction in manual inspection queues, and customer interest in evidence-preserving operational logs. The source does not prove durable revenue, margin quality, or customer concentration resilience. It is designed to test how Basar separates belief, doubt, and verification steps.",
+  },
+  {
+    title: "AsterGrid Risk Notes",
+    url: "https://example.org/astergrid/risk-notes",
+    content:
+      "Fictional demo data / not investment advice. Risk notes for fictional AsterGrid include long procurement cycles, unclear deployment cost, dependence on utility data access, and possible confusion between pilot usage and production adoption. The source warns that analyst confidence should remain limited until contracts, churn, implementation burden, and third-party customer references are verified.",
+  },
+  {
+    title: "AsterGrid Marketing Draft",
+    url: "https://example.org/astergrid/marketing-draft",
+    content:
+      "Fictional demo data / not investment advice. This fictional marketing draft says AsterGrid turns grid telemetry into actionable maintenance intelligence. It uses promotional language, highlights speed and reliability, and does not provide audited metrics. Treat this source as useful for understanding the company's self-description, but weak as standalone evidence for investment quality.",
+  },
+  {
+    title: "AsterGrid Research Boundary",
+    url: "https://example.org/astergrid/research-boundary",
+    content:
+      "Fictional demo data / not investment advice. This boundary note instructs reviewers to avoid buy or sell recommendations. Reviewers should state what the evidence supports, what remains uncertain, and what should be verified next. The demo contains no real company data, no live prices, no private financial information, and no investment advice.",
+  },
+];
+
 function readJson(key, fallback) {
   try {
     const raw = localStorage.getItem(key);
@@ -118,6 +154,10 @@ export function createDemoSource() {
     url: "https://example.org/basar-demo-source",
     content: DEMO_SOURCE_TEXT,
   });
+}
+
+export function createInvestmentDemoSources() {
+  return ASTERGRID_DEMO_SOURCES.map((source) => createSource(source));
 }
 
 export function searchSources(sources, question, limit = 5) {
