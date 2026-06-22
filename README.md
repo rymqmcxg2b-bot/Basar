@@ -1,6 +1,6 @@
 # Basar
 
-![Basar logo](assets/basar-logo.png)
+![Basar hero](assets/basar-hero.png)
 
 **Basar is a multi-AI evidence workspace powered by 0G.**
 
@@ -42,6 +42,10 @@ path uses a local user-owned relay for live 0G Router inference.
 - 0G integration notes: [docs/0g-integration.md](docs/0g-integration.md)
 - Demo script and sample sources: [examples/zero-cup](examples/zero-cup)
 - Live demo target: https://rymqmcxg2b-bot.github.io/Basar/
+
+## Demo
+
+![Basar Zero Cup silent demo](assets/basar-zero-cup-silent-subtitled.gif)
 
 ## Why It Exists
 

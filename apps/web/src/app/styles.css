@@ -151,11 +151,16 @@ p {
 
 .workspaceHeader {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(320px, 0.8fr) minmax(420px, 1.2fr);
   gap: 28px;
-  align-items: start;
+  align-items: center;
   padding-bottom: 24px;
   border-bottom: 1px solid #d8d3c8;
+}
+
+.headerIntro {
+  display: grid;
+  gap: 24px;
 }
 
 .identity p {
@@ -194,7 +199,21 @@ p {
 }
 
 .topActions {
-  justify-content: flex-end;
+  justify-content: flex-start;
+}
+
+.heroMedia {
+  min-width: 0;
+}
+
+.heroMedia img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1672 / 941;
+  border: 1px solid #d8d3c8;
+  border-radius: 8px;
+  object-fit: cover;
+  background: #141712;
 }
 
 .primaryNav {

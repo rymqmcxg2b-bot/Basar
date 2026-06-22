@@ -224,21 +224,26 @@ function App() {
   return (
     <main className="workspace">
       <header className="workspaceHeader">
-        <div className="identity">
-          <div className="brandLine">
-            <img src={`${import.meta.env.BASE_URL}basar-mark.png`} alt="" aria-hidden="true"/>
-            <span>Basar</span>
+        <div className="headerIntro">
+          <div className="identity">
+            <div className="brandLine">
+              <img src={`${import.meta.env.BASE_URL}basar-mark.png`} alt="" aria-hidden="true"/>
+              <span>Basar</span>
+            </div>
+            <h1>Add sources once. Review with many AIs. Keep the evidence.</h1>
+            <p>Same sources. Multiple 0G AI reviews. Portable evidence memory.</p>
           </div>
-          <h1>Add sources once. Review with many AIs. Keep the evidence.</h1>
-          <p>Same sources. Multiple 0G AI reviews. Portable evidence memory.</p>
+          <div className="topActions">
+            <button type="button" className="secondary" onClick={loadInvestmentDemo}>Load investment demo</button>
+            <button type="button" className="secondary" onClick={loadDemoSource}>Load demo source</button>
+            <button type="button" onClick={exportLibrary}>
+              <Download size={16}/>
+              Download growth package
+            </button>
+          </div>
         </div>
-        <div className="topActions">
-          <button type="button" className="secondary" onClick={loadInvestmentDemo}>Load investment demo</button>
-          <button type="button" className="secondary" onClick={loadDemoSource}>Load demo source</button>
-          <button type="button" onClick={exportLibrary}>
-            <Download size={16}/>
-            Download growth package
-          </button>
+        <div className="heroMedia">
+          <img src={`${import.meta.env.BASE_URL}basar-hero.png`} alt="Basar: many 0G AIs, one evidence workspace."/>
         </div>
       </header>
 
