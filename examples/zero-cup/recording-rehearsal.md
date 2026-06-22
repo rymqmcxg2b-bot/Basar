@@ -24,6 +24,8 @@ http://127.0.0.1:4173/?recording=1
 
 ## Terminal 2: 0G Router Relay
 
+### Option A: Node Relay
+
 ```bash
 cd apps/web
 OG_ROUTER_API_KEY="YOUR_KEY_HERE" node --run relay:0g
@@ -36,6 +38,27 @@ http://127.0.0.1:8787
 ```
 
 Do not record Terminal 2.
+
+### Option B: Python Emergency Relay
+
+Use this only if Node is unavailable in the recording shell.
+
+```bash
+cd /path/to/Basar
+python3 apps/web/scripts/og-router-relay.py
+```
+
+Open the setup page outside the recording:
+
+```text
+http://127.0.0.1:8787/setup
+```
+
+Health page:
+
+```text
+http://127.0.0.1:8787/health
+```
 
 ## Basar Profile Fields
 
@@ -113,6 +136,12 @@ local-demo-key
 
 Enable all three profiles.
 
+## Health Test Prompt
+
+```text
+Reply with one short sentence: ready for the Basar investment research demo.
+```
+
 ## Recording Flow
 
 1. Open `http://127.0.0.1:4173/?recording=1`.
@@ -144,10 +173,12 @@ package to multiple 0G models and preserves the answer cards.
 ## Safety
 
 - Do not record Terminal 2.
+- Do not record the Python setup page.
 - Do not commit shell history.
 - Do not commit `.env` files.
 - Do not commit screenshots or recordings with secrets.
 - Do not paste the real Router key into Basar's browser UI.
 - Use `local-demo-key` in the browser profile API key field if the UI requires a value.
+- Data is fictional, not investment advice.
 - The relay strips or ignores the browser Authorization header and uses
-  `OG_ROUTER_API_KEY` for upstream Router calls.
+  the user-owned local relay key for upstream Router calls.

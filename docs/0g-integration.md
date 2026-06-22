@@ -10,8 +10,9 @@ and future browser-native wallet-signed operation.
 ### 1. Local Fallback
 
 - Browser-local sources.
+- Source cards and claim cards.
 - Evidence retrieval from the user's saved source text.
-- Offline/non-model summaries when no model endpoint is configured.
+- Local fallback review when no model endpoint is configured.
 - Exportable `basar.growth-package.v1` packages.
 
 Local fallback is useful for privacy, demos without paid APIs, and continuity
@@ -25,9 +26,8 @@ prototypes, self-hosted deployments, and user-controlled local relays.
 
 Router API keys should stay outside the browser. For recording and rehearsal,
 Basar uses a local relay at `http://127.0.0.1:8787/v1`. The browser sends the
-same evidence package to the local relay, the relay injects
-`OG_ROUTER_API_KEY` from the user's terminal environment, and 0G Router returns
-real model responses as answer cards.
+same evidence package to the local relay, the relay injects the 0G Router key
+server-side, and 0G Router returns real model responses as answer cards.
 
 This is the recommended Zero Cup recording path.
 
@@ -56,6 +56,7 @@ The Direct wallet-signed path is not implemented in this Group Stage version.
 5. Each model returns one answer card with provider, model, status, answer,
    citations, and uncertainty or error.
 6. Basar saves answer cards into the growth package as `parallel_reviews`.
+7. The Proof Panel records successful and failed providers for the review run.
 
 ## Proof Checklist
 
@@ -67,7 +68,7 @@ The Direct wallet-signed path is not implemented in this Group Stage version.
   - `glm-5.2`
 - Review uses the same evidence package.
 - Answer cards show provider/model/status.
-- Proof Panel shows successful providers.
+- Proof Panel shows successful and failed providers.
 - Growth package includes `parallel_reviews`.
 
 ## Storage Pointer Semantics

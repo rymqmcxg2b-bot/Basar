@@ -6,6 +6,7 @@ Basar lets users ask multiple 0G AI models the same question over the same
 sources, compare their answer cards, preserve citations, and export or publish a
 portable growth package. For live 0G Router inference in the recording, Basar
 uses a user-controlled local relay so Router API keys stay outside the browser.
+Add sources once. Review with many AIs. Keep the evidence.
 
 ## Problem
 
@@ -29,6 +30,8 @@ Router-compatible profiles, compare answer cards, and preserve the review as a
 - Basar sends the same retrieved evidence package to each selected model.
 - Each model returns one answer card with provider, model, status, answer,
   citations, and uncertainty or error.
+- The UI records provider, model, status, citations, and error metadata for
+  each review card and proof panel run.
 - Growth packages can include `parallel_reviews` records and can be exported or
   published to a user-controlled 0G-compatible storage endpoint.
 
@@ -45,6 +48,9 @@ Router-compatible profiles, compare answer cards, and preserve the review as a
 
 Local mode is the offline fallback. The Zero Cup recording path uses 0G Router
 through a local user-owned relay as the active inference layer.
+
+The investment research demo uses fictional AsterGrid source cards and is not
+investment advice.
 
 ## How To Run Locally
 

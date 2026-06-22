@@ -4,6 +4,8 @@
 
 **Basar is a multi-AI evidence workspace powered by 0G.**
 
+Add sources once. Review with many AIs. Keep the evidence.
+
 Ask multiple 0G AI models the same question over the same sources, compare
 their answer cards, preserve citations, and export or publish a portable growth
 package.
@@ -73,7 +75,7 @@ Instead of empty token consumption, Basar focuses on meaningful usage: research,
 
 ### Browser, Router, and Direct
 
-- Router path: best for server-side apps, agents, CLIs, prototypes, and user-controlled relays.
+- Router path: best for server-side apps, agents, CLIs, prototypes, self-hosted deployments, and user-controlled relays.
 - Static browser path: local-first workspace, source cards, evidence packages, export, and optional CORS-compatible endpoints.
 - Direct path: future browser dApp direction where the user wallet signs requests.
 - The Zero Cup recording uses a local user-owned relay so the 0G Router key stays outside the browser.
