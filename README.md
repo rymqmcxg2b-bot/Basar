@@ -42,6 +42,7 @@ path uses a local user-owned relay for live 0G Router inference.
 - 0G integration notes: [docs/0g-integration.md](docs/0g-integration.md)
 - Demo script and sample sources: [examples/zero-cup](examples/zero-cup)
 - Live demo target: https://rymqmcxg2b-bot.github.io/Basar/
+- Playable demo video: https://rymqmcxg2b-bot.github.io/Basar/demo.html
 
 ## Demo
 
